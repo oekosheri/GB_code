@@ -1,0 +1,14 @@
+
+test
+.idea
+GB_*
+__pycache__
+.vscode
+log.file
+io_file
+Draft_code.py
+.ipynb*
+Readme
+
+
+
