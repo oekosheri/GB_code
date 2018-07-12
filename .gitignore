@@ -1,13 +1,11 @@
 
 test
 .idea
-GB_*
+input*
 __pycache__
 .vscode
 log.file
 io_file
-Draft_code.py
-.ipynb*
 Readme
 
 
