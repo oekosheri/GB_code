@@ -139,8 +139,9 @@ To produce the GB of interest we go on with: [_gb_generator_](./gb_generator.py)
 <<------ 32 atoms are being removed! ------>>
 <<------ 50 GB structures are being created! ------>>
 ```
-The following is a one of these 50 GBs visualized by [Ovito](https://ovito.org/index.php/download):
-<img src="./exGB.png" width="40%">
+The following is a one of these 50 GBs visualized by [Ovito](https://ovito.org/index.php/download):  
+
+<img src="./exGB.png" width="50%">
 
 - _**A note on microscopic degrees of freedom:**_
 - _**A note on the minimization procedure:**_
