@@ -42,6 +42,16 @@ Sigma:    49  Theta:  43.57
 ```
 Once you pick one of these angles (sigma boundaries) you should use the second mode, decide on a basis, for ex: diamond, and list the GB planes of interest:
 
+"
+_Second mode:
+ "python CSLgenerator.py axis(u v w) basis sigma [limit]" -----> Where basis is
+  either fcc, bcc, diamond or sc. You read the sigma of interest from the first
+  mode run. The limit here refers to CSL GB inclinations. The bigger the limit,
+  the higher the indices of CSL planes.
+  (the limit by default: 2)_
+  
+  _ex:_
+
 ```
 > python csl_generator.py 1 1 1 diamond 13
 
@@ -60,6 +70,66 @@ Once you pick one of these angles (sigma boundaries) you should use the second m
 ```
 Which you can write to a file if you wish.
 
+Your chosen axis, basis and sigma will be written to an io_file (a yaml file) which will be read by gb_geberator.py. 
+You must customize the io_file and then run the gb_geberator.py code after. This is how the io_file looks like right now:
+```
+  
+### input parameters for gb_generator.py ###
+# CSL plane of interest that you read from the output ofcsl_generator as GB1
+GB_plane: [1,1,1]
+# lattic parameter in Angstrom
+
+lattice_parameter: 4
+# atoms that are closer than this fraction of the lattice parameter will be removed
+# either from grain1 (g1) or from grain2 (g2). If you choose 0 no atoms will be removed
+
+overlap_distance: 0.3
+# decide which grain the atoms should be removed from
+
+which_g: g1
+# decide whether you want rigid body translations to be done on the GB_plane or not (yes or no)
+# When yes, for any GB aside from twist GBs, the two inplane
+# CSL vecs will be divided by integers a and b to produce a*b initial
+# configurations. The default values produce 50 initial structures
+# if you choose no for rigid_trans, you do not need to care about a and b.
+# twist boundaries are handled internally
+
+rigid_trans: no
+a: 10
+b: 5
+# dimensions of the supercell in: [l1,l2,l3],  where l1 isthe direction along the GB_plane normal
+#  and l2 and l3 are inplane dimensions
+
+dimensions: [1,1,1]
+
+# The following is your csl_generator output. YOU DO NOT NEED TO CHANGE THEM!
+
+axis: [1, 1, 1]
+m: 7
+n: 1
+basis: diamond
+
+```
+- GB_plane: must be chosen from the list that was provided after running the second mode of csl_generator.py. Here for ex: [2,  1, -2].
+- lattice_parameter: is self-explanatory.
+
+To minimize the grain boundary energy microscopic degrees of freedom must be taken into account. Therefore here we allow for 
+(1) atom removal by finding atoms that are too close to one another and (2) rigid body translations on the GB plane.
+(1) will be achieved by
+
+- overlap_distance: a fraction of lattice parameter. See the description in io_file.
+- which_g: g1 or g2
+
+(2) will be achieved by
+
+-  rigid_trans: yes or no. If no, the following a and b will be disregarded. For any grain boundary type except the twist boundary, the smalles CSL unit (the two orthogonal CSL vectors on the GB plane) will be divided by the following a and b integers to produce a grid on which the boundary will be translated. a is used for the larger inplanve vector and b for the smaller one. So by defalut I produce _5 * 10 = 50_  initial structures to be minimized for finding the lowest energy structure. The higher your chosen a and b, the denser the grid.
+- a: 10
+- b: 5
+
+You can choose a combination of atom remmoval and rigid body translation for finding the minimum energy GB. 
+
+_**A note on microscopic degrees of freedom:**_
+**A note on the minimization procedure:**_
 
 
 
