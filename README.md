@@ -21,12 +21,13 @@ _First mode:
   indices of the rotation axis such as 1 0 0, 1 1 1, 1 1 0 and so on. The limit
   is the maximum Sigma of interest.
   (the limit by default: 100)_
+  
   _ex:_
 
 ```
 > python csl_generator.py 1 1 1 50 
 
-...
+  List of possible CSLs for [1 1 1] axis sorted by Sigma
 Sigma:     1  Theta:   0.00
 Sigma:     3  Theta:  60.00
 Sigma:     7  Theta:  38.21
@@ -38,8 +39,28 @@ Sigma:    37  Theta:  50.57
 Sigma:    39  Theta:  32.20
 Sigma:    43  Theta:  15.18
 Sigma:    49  Theta:  43.57
+```
+Once you pick one of these angles (sigma boundaries) you should use the second mode, decide on a basis, for ex: diamond, and list the GB planes of interest:
 
 ```
+> python csl_generator.py 1 1 1 diamond 13
+
+----------List of possible CSL planes for Sigma 13---------
+ GB1---------------GB2-------------Type----------Number of Atoms
+[ 2  1 -2]             [ 1  2 -2]             Mixed                  3744
+[-1 -1 -1]             [-1 -1 -1]             Twist                  1248
+[1 1 1]                [1 1 1]                Twist                  1248
+[-1  2 -2]             [-2  2 -1]             Mixed                  3744
+[ 1 -2  2]             [ 2 -2  1]             Mixed                  3744
+[-2 -1  2]             [-1 -2  2]             Mixed                  3744
+[-3 -2  1]             [-2 -3  1]             Mixed                  2912
+[ 0 -3  1]             [ 1 -3  0]             Mixed                  2080
+[ 1  3 -4]             [-1  4 -3]             Symmetric Tilt         1248
+  ...
+```
+Which you can write to a file if you wish.
+
+
 
 
 
