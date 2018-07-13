@@ -3,7 +3,7 @@ This python package helps you create orthogonal grain boundary supercells for at
 coincident site lattice (CSL) formulations for cubic materials (sc, bcc, fcc, diamond). I intend to extend it to hcp structures soon.
 
 # Structure
-There are two main scripts: [_csl_generator_](./csl_generator.py) and [_gb_generator_](./csl_generator.py) which you need to use in this order to produce the final gb structure.
+There are two main scripts: [_csl_generator.py_](./csl_generator.py) and [_gb_generator.py_](./csl_generator.py) which you need to use in this order to produce the final gb structure.
 In this description I will explain the steps to use the code in the Terminal and I have also attached two _jupyter notebooks_ ([Usage_of_GB_code.ipynb](./Usage_of_GB_code.ipynb), [Dichromatic_pattern_CSL_.ipynb](./Dichromatic_pattern_CSL_.ipynb)) which
 describe how the code be can be accessed and used in the notebboks by various examples. 
 
@@ -14,7 +14,7 @@ these and additionally a basis, a CSL minimal cell will be created and you can s
 the CSL that you pick from. In the jupyter notebooks, [Usage_of_GB_code.ipynb](./Usage_of_GB_code.ipynb), example criteria have been
 shown to help pinpoint the boundary plane of interest. 
 
-The first code [_csl_generator_](./csl_generator.py) runs in two modes: 
+The first code [_csl_generator.py_](./csl_generator.py) runs in two modes: 
 
 _First mode:
   "python CSLgenerator.py axis(u v w) [limit]" ----->  Where the u v w are the
@@ -133,7 +133,7 @@ And finally the supercell dimensions.
 - dimensions: See the io_file description.
 
 As an example, we change the default gb_plane to  [2,  1, -2] and rigid_trans to 'yes' in the io_file.  
-To produce the GB of interest we go on with: [_gb_generator_](./gb_generator.py)
+To produce the GB of interest we go on with: [_gb_generator.py_](./gb_generator.py)
 ```
 > python gb_generator.py io_file
 <<------ 32 atoms are being removed! ------>>
