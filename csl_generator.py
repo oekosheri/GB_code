@@ -12,13 +12,13 @@ Usage = """
  The code runs in two modes.
 
  First mode:
-  "python CSLgenerator axis(u v w) [limit]" ----->  Where the u v w are the
+  "python CSLgenerator.py axis(u v w) [limit]" ----->  Where the u v w are the
   indices of the rotation axis such as 1 0 0, 1 1 1, 1 1 0 and so on. The limit
   is the maximum Sigma of interest.
   (the limit by default: 100)
 
  Second mode:
- "python CSLgenerator axis(u v w) basis sigma [limit]" -----> Where basis is
+ "python CSLgenerator.py axis(u v w) basis sigma [limit]" -----> Where basis is
   either fcc, bcc, diamond or sc. You read the sigma of interest from the first
   mode run. The limit here refers to CSL GB inclinations. The bigger the limit,
   the higher the indices of CSL planes.
@@ -603,23 +603,23 @@ def Ortho_fcc_bcc(basis, O1, O2):
 
 def Write_to_io(axis, m, n, basis):
 
-    my_dict = {'GB_plane': '[1,1,1]', 'lattice_parameter': '4',
+    my_dict = {'GB_plane': str([axis[0], axis[1], axis[2]]), 'lattice_parameter': '4',
                'overlap_distance': '0.3', 'which_g': 'g1',
                'rigid_trans': 'no', 'a': '10', 'b': '5',
                'dimensions': '[1,1,1]'}
 
     with open('io_file', 'w') as f:
         f.write('### input parameters for gb_generator.py ### \n')
-        f.write('# CSL plane of interest that you read from the output of'
+        f.write('# CSL plane of interest that you read from the output of '
                 'csl_generator as GB1 \n \n')
         f.write(list(my_dict.keys())[0] + ': ' + list(my_dict.values())[0] +
                 '\n')
-        f.write('# lattic parameter in the units of interest \n \n')
+        f.write('# lattic parameter in Angstrom \n \n')
         f.write(list(my_dict.keys())[1] + ': ' + list(my_dict.values())[1] +
                 '\n')
-        f.write('# atoms that are closer than this fraction of the lattice'
+        f.write('# atoms that are closer than this fraction of the lattice '
                 'parameter will be removed \n')
-        f.write('# either from grain1 (g1) or from grain2 (g2). If you choose'
+        f.write('# either from grain1 (g1) or from grain2 (g2). If you choose '
                 '0 no atoms will be removed \n\n')
         f.write(list(my_dict.keys())[2] + ': ' + list(my_dict.values())[2] +
                 '\n')
@@ -695,8 +695,12 @@ def main():
 
         try:
             t, m, n = get_theta_m_n_list(uvw, sigma)[0]
-            print(type(uvw), type(m), type(n), type(basis))
             Write_to_io(uvw, m, n, basis)
+
+            print("----------List of possible CSL planes for Sigma {}---------"
+                  .format(sigma))
+            print(" GB1---------------GB2-------------Type----------"
+                  "Number of Atoms ")
             print_list_GB_Planes(uvw, basis, m, n, lim)
 
         except:
@@ -717,6 +721,7 @@ def main():
                 print (2*'\n')
                 print('You have chosen a large limit! It may take a while ...')
                 print (2*'\n')
+
             print("----------List of possible CSL planes for Sigma {}---------"
                   .format(sigma))
             print(" GB1---------------GB2-------------Type----------"
