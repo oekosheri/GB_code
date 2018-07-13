@@ -111,6 +111,7 @@ basis: diamond
 
 ```
 - GB_plane: must be chosen from the list that was provided after running the second mode of csl_generator.py. Here for ex: [2,  1, -2].
+Change the default plane to your chosen one.
 - lattice_parameter: is self-explanatory.
 
 To minimize the grain boundary energy microscopic degrees of freedom must be taken into account. Therefore here we allow for 
@@ -122,14 +123,29 @@ To minimize the grain boundary energy microscopic degrees of freedom must be tak
 
 (2) will be achieved by
 
--  rigid_trans: yes or no. If no, the following a and b will be disregarded. For any grain boundary type except the twist boundary, the smalles CSL unit (the two orthogonal CSL vectors on the GB plane) will be divided by the following a and b integers to produce a grid on which the boundary will be translated. a is used for the larger inplanve vector and b for the smaller one. So by defalut I produce _5 * 10 = 50_  initial structures to be minimized for finding the lowest energy structure. The higher your chosen a and b, the denser the grid.
+-  rigid_trans: yes or no. If no, the following a and b will be disregarded. For any grain boundary type except the twist boundary, the smalles inplane unit that must be scanned comprise the smallest orthogonal CSL vectors on the GB plane which will be divided by the following a and b integers to produce a grid on which the boundary will be translated. a is used for the larger inplan vector and b for the smaller one. So by defalut I produce _5 * 10 = 50_  initial structures to be minimized for finding the lowest energy structure. The higher your chosen a and b, the denser the grid.
+For the twist grain boundary the smallest unit that need to be scanned is a repeat unit created by The DSC vectors (the smallest repeat vectors of the CSL) and the code will handle it internally. 
 - a: 10
 - b: 5
 
 You can choose a combination of atom remmoval and rigid body translation for finding the minimum energy GB. 
+And finally the supercell dimensions. 
+- dimensions: See the io_file description.
 
-_**A note on microscopic degrees of freedom:**_
-**A note on the minimization procedure:**_
+As an example, we change the default gb_plane to  [2,  1, -2] and rigid_trans to 'yes' in the io_file.  
+To produce the GB of interest we go on with: [_gb_generator_](./gb_generator.py)
+```
+> python gb_generator.py io_file
+<<------ 32 atoms are being removed! ------>>
+<<------ 50 GB structures are being created! ------>>
+```
+The following is a one of these 50 GBs visualized by [Ovito](https://ovito.org/index.php/download):
+
+
+
+
+- _**A note on microscopic degrees of freedom:**_
+- _**A note on the minimization procedure:**_
 
 
 
