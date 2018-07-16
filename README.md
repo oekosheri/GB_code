@@ -7,8 +7,7 @@ This code produces a final structure to be read in [LAMMPS](https://lammps.sandi
 There are two main scripts: [_csl_generator.py_](./csl_generator.py) and [_gb_generator.py_](./csl_generator.py) which you need to use in this order to produce the final grain boundary (GB) structure.
 In this description I will explain the steps to use the code in the Terminal and I have also attached two _jupyter notebooks_ ([Usage_of_GB_code.ipynb](./Usage_of_GB_code.ipynb), [Dichromatic_pattern_CSL_.ipynb](./Dichromatic_pattern_CSL_.ipynb)) which
 describe how the code be can be accessed and used in the notebooks by various examples. 
-you can use [![Binder](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/oekosheri/GB_code/master) for an interactive Jupyter notebook environment.
-
+You can use [this link](https://mybinder.org/v2/gh/oekosheri/GB_code/master) for an interactive Jupyter notebook environment provided by Binder. [![Binder](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/oekosheri/GB_code/master)  
 
 # Usage
 To pick a grain boundary 5 degrees of freedom need to be fixed: rotation axis, rotation angle and GB plane orientation.
@@ -156,7 +155,7 @@ If you are a more rigorous user, you can just create the GB structure with no at
 - _**A note on the minimization procedure:**_  
 
 I often do a three stage minimization at 0K followed by an MD annealing simulation in [LAMMPS](https://lammps.sandia.gov/).  
-The 0K miminimization is composed of: A congugate gradient minimization of the energy of atoms, the simulation box and then atoms again
+The 0K miminimization is composed of: A conjugate gradient minimization of the energy of atoms, the simulation box and then atoms again;
 similar to a procedure explained [here](https://icme.hpc.msstate.edu/mediawiki/index.php/LAMMPS_Input_Deck_for_Grain_boundary_generation).
 For the annealing simulations I use an _nvt_ ensemble followed by damped dynamics. Depending on the GB structure and your final purpose you can run annealing simulations for different time spans.
 # Questions  
