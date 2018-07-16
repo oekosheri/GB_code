@@ -157,6 +157,9 @@ I often do a three stage minimization at 0K followed by an MD annealing simulati
 The 0K miminimization is composed of: A congugate gradient minimization of the energy of atoms, the simulation box and then atoms again
 similar to a procedure explained [here](https://icme.hpc.msstate.edu/mediawiki/index.php/LAMMPS_Input_Deck_for_Grain_boundary_generation).
 For the annealing simulations I use an _nvt_ ensemble followed by damped dynamics. Depending on the GB structure and your final purpose you can run annealing simulations for different time spans.
+# Questions
+If you have any questions 
+
 
 # License
 [MIT](./LICENSE).
