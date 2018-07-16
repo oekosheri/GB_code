@@ -4,12 +4,12 @@ coincident site lattice (CSL) formulations for cubic materials (sc, bcc, fcc, di
 This code produces a final structure to be read in [LAMMPS](https://lammps.sandia.gov/).
 
 # Structure
-There are two main scripts: [_csl_generator.py_](./csl_generator.py) and [_gb_generator.py_](./csl_generator.py) which you need to use in this order to produce the final gb structure.
+There are two main scripts: [_csl_generator.py_](./csl_generator.py) and [_gb_generator.py_](./csl_generator.py) which you need to use in this order to produce the final grain boundary (GB) structure.
 In this description I will explain the steps to use the code in the Terminal and I have also attached two _jupyter notebooks_ ([Usage_of_GB_code.ipynb](./Usage_of_GB_code.ipynb), [Dichromatic_pattern_CSL_.ipynb](./Dichromatic_pattern_CSL_.ipynb)) which
-describe how the code be can be accessed and used in the notebboks by various examples. 
+describe how the code be can be accessed and used in the notebooks by various examples. 
 
 # Usage
-To pick a grain boundary (GB) 5 degrees of freedom need to be fixed: rotation axis, rotation angle and GB plane orientation.
+To pick a grain boundary 5 degrees of freedom need to be fixed: rotation axis, rotation angle and GB plane orientation.
 We start by choosing only an axis, say a low index [1, 1, 1] and list the possibilities for the angle (sigma). Once you pick
 these and additionally a basis, a CSL minimal cell will be created and you can see a list of possible GB plane orientations within
 the CSL that you can pick from. In the jupyter notebooks, [Usage_of_GB_code.ipynb](./Usage_of_GB_code.ipynb), example criteria have been
@@ -145,11 +145,14 @@ The following is a one of these 50 GBs visualized by [Ovito](https://ovito.org/i
 
 <img src="./exGB.png" width="50%">
 
-- _**A note on microscopic degrees of freedom:**_
-In the absence of a consensus on how to find the global minimum energy GB structure I have used atom removal and/or rigid body translations according to the description above to find the minimized structure. For rigid body translations, the smallest translation vector to guarantee the minimum energy structure is not well defined, therefore you can make the mesh as dense as you wish by choosing larger a and b values. By trial and error in fcc elemental cases (such as Al and Cu) I have come to the rule of thumb conclusion of 50 to 100 initial structures.  
-If you are a more rigorous user, you can just create the GB structure and run a more involved minimum energy search routine.
+- _**A note on microscopic degrees of freedom:**_  
 
-- _**A note on the minimization procedure:**_
+In the absence of a consensus on how to find the global minimum energy GB structure I have used atom removal and/or rigid body translations according to the description above to find the minimized structure. For rigid body translations, the smallest translation vector to guarantee the minimum energy structure is not well defined, therefore you can make the mesh as dense as you wish by choosing larger a and b values. By trial and error in fcc elemental cases (such as Al and Cu) I have come to the rule of thumb conclusion of 50 
+to 100 initial structures.    
+If you are a more rigorous user, you can just create the GB structure with no atom removal or rigid body translation and run a more involved minimum energy search routine.
+
+- _**A note on the minimization procedure:**_  
+
 I often do a three stage minimization at 0K followed by an MD annealing simulation in [LAMMPS](https://lammps.sandia.gov/).  
 The 0K miminimization is composed of: A congugate gradient minimization of the energy of atoms, the simulation box and then atoms again
 similar to a procedure explained [here](https://icme.hpc.msstate.edu/mediawiki/index.php/LAMMPS_Input_Deck_for_Grain_boundary_generation).
