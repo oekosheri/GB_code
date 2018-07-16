@@ -146,11 +146,11 @@ The following is a one of these 50 GBs visualized by [Ovito](https://ovito.org/i
 
 <img src="./exGB.png" width="50%">
 
-- _**A note on microscopic degrees of freedom:**_  
+- _**A note on the microscopic degrees of freedom:**_  
 
 In the absence of a consensus on how to find the global minimum energy GB structure I have used atom removal and/or rigid body translations according to the description above to find the minimized structure. For rigid body translations, the smallest translation vector to guarantee the minimum energy structure is not well defined, therefore you can make the mesh as dense as you wish by choosing larger a and b values. By trial and error in fcc elemental cases (such as Al and Cu) I have come to the rule of thumb conclusion of 50 
 to 100 initial structures.    
-If you are a more rigorous user, you can just create the GB structure with no atom removal or rigid body translation and run a more involved minimum energy search routine.
+If you are a more rigorous user, you can just create the GB structure with no atom removal or rigid body translations and run a more involved minimum energy search routine.
 
 - _**A note on the minimization procedure:**_  
 
