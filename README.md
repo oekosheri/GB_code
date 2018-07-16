@@ -11,7 +11,7 @@ describe how the code be can be accessed and used in the notebboks by various ex
 To pick a grain boundary (GB) 5 degrees of freedom need to be fixed: rotation axis, rotation angle and GB plane orientation.
 We start by choosing only an axis, say a low index [1, 1, 1] and list the possibilities for the angle (sigma). Once you pick
 these and additionally a basis, a CSL minimal cell will be created and you can see a list of possible GB plane orientations within
-the CSL that you pick from. In the jupyter notebooks, [Usage_of_GB_code.ipynb](./Usage_of_GB_code.ipynb), example criteria have been
+the CSL that you can pick from. In the jupyter notebooks, [Usage_of_GB_code.ipynb](./Usage_of_GB_code.ipynb), example criteria have been
 shown to help pinpoint the boundary plane of interest. 
 
 The first code [_csl_generator.py_](./csl_generator.py) runs in two modes: 
@@ -71,9 +71,10 @@ _Second mode:
 Which you can write to a file if you wish.
 
 Your chosen axis, basis and sigma will be written to an io_file (a yaml file) which will be read by gb_geberator.py. 
-You must customize the io_file and then run the gb_geberator.py code after. This is how the io_file looks like right now:
+You must customize the io_file and then run the gb_geberator.py code after to get the atomic structure of the GB. This is 
+how the io_file looks like right now:
+
 ```
-  
 ### input parameters for gb_generator.py ###
 # CSL plane of interest that you read from the output ofcsl_generator as GB1
 GB_plane: [1,1,1]
@@ -114,7 +115,7 @@ basis: diamond
 Change the default plane to your chosen one.
 - lattice_parameter: is self-explanatory.
 
-To minimize the grain boundary energy microscopic degrees of freedom must be taken into account. Therefore here we allow for 
+To minimize the grain boundary energy, microscopic degrees of freedom must be taken into account. Therefore here we allow for 
 (1) atom removal by finding atoms that are too close to one another and (2) rigid body translations on the GB plane.
 (1) will be achieved by
 
@@ -123,16 +124,16 @@ To minimize the grain boundary energy microscopic degrees of freedom must be tak
 
 (2) will be achieved by
 
--  rigid_trans: yes or no. If no, the following a and b will be disregarded. For any grain boundary type except the twist boundary, the smalles inplane unit that must be scanned comprise the smallest orthogonal CSL vectors on the GB plane which will be divided by the following a and b integers to produce a grid on which the boundary will be translated. a is used for the larger inplan vector and b for the smaller one. So by defalut I produce _5 * 10 = 50_  initial structures to be minimized for finding the lowest energy structure. The higher your chosen a and b, the denser the grid.
-For the twist grain boundary the smallest unit that need to be scanned is a repeat unit created by The DSC vectors (the smallest repeat vectors of the CSL) and the code will handle it internally. 
+-  rigid_trans: yes or no. If no, the following a and b will be disregarded. For any grain boundary type except the twist boundary, the smalles inplane unit that must be scanned comprises the smallest orthogonal CSL vectors on the GB plane. These vectors will be divided by the following a and b integers to produce a grid on which the boundary will be translated. Here a is used for the larger inplane vector and b for the smaller one. So by defalut I produce _5 * 10 = 50_  initial structures to be minimized for finding the lowest energy structure. The higher your chosen a and b, the denser the grid.
+For the twist grain boundary the smallest unit that needs to be scanned is a repeat unit created by The DSC vectors (the smallest repeat vectors of the CSL) and the code will handle it internally. 
 - a: 10
 - b: 5
 
 You can choose a combination of atom remmoval and rigid body translation for finding the minimum energy GB. 
-And finally the supercell dimensions. 
-- dimensions: See the io_file description.
+ 
+- dimensions: Finally the supercell dimensions according to the io_file.
 
-As an example, we change the default gb_plane to  [2,  1, -2] and rigid_trans to 'yes' in the io_file.  
+As an example, we change the default gb_plane to [2,  1, -2] and rigid_trans to 'yes' in the io_file.  
 To produce the GB of interest we go on with: [_gb_generator.py_](./gb_generator.py)
 ```
 > python gb_generator.py io_file
@@ -144,7 +145,12 @@ The following is a one of these 50 GBs visualized by [Ovito](https://ovito.org/i
 <img src="./exGB.png" width="50%">
 
 - _**A note on microscopic degrees of freedom:**_
+In the absence of a consensus on how to find the global minimum energy GB structure I used atom removal + rigid body translations according to the description above to find the minimized structure. For rigid body translations, the smallest translation vector to guarantee the minimum energy structure is not well defined, therefore you can make the mesh as dense as you wish by choosing larger a and b values. By trial and error in fcc elemental cases (such as Al and Cu) I have come to the rule of thumb conclusion of 50 initial structure.  
+If you are a more rigorous user you can just create the GB structure and run a more involved minimum energy search routine.
+
 - _**A note on the minimization procedure:**_
+
+
 
 
 
