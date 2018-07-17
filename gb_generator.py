@@ -77,16 +77,25 @@ class GB_character:
 
     def WriteGB(self, *args):
 
-        if len(args) == 8:
-            self.overD = float(args[0])
+        self.overD = float(args[0])
+        if self.overD > 0:
             self.whichG = str(args[1])
             self.trans = args[2]
-            a = int(args[3])
-            b = int(args[4])
-            self.dim = np.array([int(args[5]), int(args[6]), int(args[7])])
+            if self.trans:
+                if len(args) != 8:
+                    print('Make sure the input arguments are right!')
+                    sys.exit()
+                a = int(args[3])
+                b = int(args[4])
+                self.dim = np.array([int(args[5]), int(args[6]), int(args[7])])
+            else:
+                if len(args) != 6:
+                    print('Make sure the input arguments are right!')
+                    sys.exit()
+                self.dim = np.array([int(args[3]), int(args[4]), int(args[5])])
             xdel, ydel, x_indice, y_indice = self.Find_overlapping_Atoms()
             print ("<<------ {} atoms are being removed! ------>>"
-                   .format(len(xdel)))
+                    .format(len(xdel)))
 
             if self.whichG == "G1" or self.whichG == "g1":
                 self.atoms1 = np.delete(self.atoms1, x_indice, axis=0)
@@ -106,24 +115,34 @@ class GB_character:
 
             if not self.trans:
                 count = 0
+                print ("<<------ 1 GB structure is being created! ------>>")
                 self.Write_to_Lammps(count)
             elif self.trans:
                 self.Translate(a, b)
 
-        elif len(args) == 6:
-
-            self.trans = (args[0])
-            a = int(args[1])
-            b = int(args[2])
-            self.dim = np.array([int(args[3]), int(args[4]), int(args[5])])
-            self.Expand_Super_cell()
-
-            if not self.trans:
+        elif self.overD == 0:
+            self.trans = args[1]
+            if self.trans:
+                if len(args) != 7:
+                    print('Make sure the input arguments are right!')
+                    sys.exit()
+                print ("<<------ 0 atoms are being removed! ------>>")
+                a = int(args[2])
+                b = int(args[3])
+                self.dim = np.array([int(args[4]), int(args[5]), int(args[6])])
+                self.Expand_Super_cell()
+                self.Translate(a, b)
+            else:
+                if len(args) != 5:
+                    print('Make sure the input arguments are right!')
+                    sys.exit()
+                self.dim = np.array([int(args[2]), int(args[3]), int(args[4])])
                 count = 0
+                print ("<<------ 1 GB structure is being created! ------>>")
                 self.Write_to_Lammps(count)
-            elif self.trans:
-
-                self.Translate(a, b)
+        else:
+            print('Overlap distance is not inputted correctly!')
+            sys.exit()
 
     def CSL_Ortho_unitcell_atom_generator(self):
 
@@ -376,11 +395,17 @@ def main():
         gbI.ParseGB(axis, basis, LatP, m, n, gbplane)
         gbI.CSL_Bicrystal_Atom_generator()
 
-        if overlap > 0:
+        if overlap > 0 and rigid:
             gbI.WriteGB(overlap, whichG, rigid, a, b, dim1, dim2, dim3)
 
-        elif overlap == 0:
-            gbI.WriteGB(rigid, a, b, dim1, dim2, dim3)
+        elif overlap > 0 and not rigid:
+            gbI.WriteGB(overlap, whichG, rigid, dim1, dim2, dim3)
+
+        elif overlap == 0 and rigid:
+            gbI.WriteGB(overlap, rigid, a, b, dim1, dim2, dim3)
+
+        elif overlap == 0 and not rigid:
+            gbI.WriteGB(overlap, rigid, dim1, dim2, dim3)
 
     else:
         print(Usage)
