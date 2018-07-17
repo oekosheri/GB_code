@@ -1,13 +1,10 @@
 # GB_code
-This python package helps you create orthogonal grain boundary supercells for atomistic calculations. The code is based on the 
-coincident site lattice (CSL) formulations for cubic materials (sc, bcc, fcc, diamond). I intend to extend it to hcp structures soon.
-This code produces a final structure to be read in [LAMMPS](https://lammps.sandia.gov/).  
+This python package helps you create orthogonal grain boundary supercells for atomistic calculations. The code is based on the coincident site lattice (CSL) formulations for cubic materials (sc, bcc, fcc, diamond). I intend to extend it to hcp structures soon. This code produces a final structure to be read in [LAMMPS](https://lammps.sandia.gov/).    
 If you want to run DFT calculations you can use [Ovito](https://ovito.org/index.php/download) to output a POSCAR file from this LAMMPS input structure.
 
 # Structure
-There are two main scripts: [_csl_generator.py_](./csl_generator.py) and [_gb_generator.py_](./csl_generator.py) which you need to use in this order to produce the final grain boundary (GB) structure.
-In this description I will explain the steps to use the code in the Terminal and I have also attached two _jupyter notebooks_ ([Usage_of_GB_code.ipynb](./Usage_of_GB_code.ipynb), [Dichromatic_pattern_CSL_.ipynb](./Dichromatic_pattern_CSL_.ipynb)) which
-describe how the code be can be accessed and used in the notebooks by various examples. 
+There are two main scripts: [_csl_generator.py_](./csl_generator.py) and [_gb_generator.py_](./csl_generator.py) which you need to use in this order to produce the final grain boundary (GB) structure.  
+In this README I will explain the steps to use the code in the Terminal and I have also attached two _jupyter notebooks_ ([Usage_of_GB_code.ipynb](./Usage_of_GB_code.ipynb), [Dichromatic_pattern_CSL_.ipynb](./Dichromatic_pattern_CSL_.ipynb)) which describe how the code be can be accessed and used in the notebooks by various examples. These notebooks have extra functionality. The former is for the general usage of the code and some tips to locate GBs of interest, the latter depicts how CSL construction can be used for different purposes.  
 You can use [this link](https://mybinder.org/v2/gh/oekosheri/GB_code/master) for an interactive Jupyter notebook environment provided by Binder. [![Binder](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/oekosheri/GB_code/master)  
 
 # Usage
@@ -127,8 +124,8 @@ To minimize the grain boundary energy, microscopic degrees of freedom must be ta
 
 (2) will be achieved by
 
--  rigid_trans: yes or no. If no, the following a and b will be disregarded. For any grain boundary type except the twist boundary, the smalles inplane unit that must be scanned comprises the smallest orthogonal CSL vectors on the GB plane. These vectors will be divided by the following a and b integers to produce a grid on which the boundary will be translated. Here a is used for the larger inplane vector and b for the smaller one. So by defalut I produce _5 * 10 = 50_  initial structures to be minimized for finding the lowest energy structure. The higher your chosen a and b, the denser the grid.
-For the twist grain boundary the smallest unit that needs to be scanned is a repeat unit created by The DSC vectors (the smallest repeat vectors of the CSL) and the code will handle it internally. 
+-  rigid_trans: yes or no. If no, the following a and b will be disregarded. For any grain boundary type except the twist boundary, the smallest inplane unit that must be scanned comprises the unitcell formed by the smallest orthogonal CSL vectors on the GB plane. These vectors will be divided by the following a and b integers to produce a grid on which the boundary will be translated. Here a is used for the larger inplane vector and b for the smaller one. So by defalut I produce _5 * 10 = 50_ initial structures to be minimized for finding the lowest energy structure. The higher your chosen a and b, the denser the grid.  
+For the twist grain boundary the smallest unit that needs to be scanned is the unitcell created by the DSC vectors (the smallest repeat vectors of the CSL) and the code will handle it internally. 
 - a: 10
 - b: 5
 
