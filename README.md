@@ -1,7 +1,8 @@
 # GB_code
 This python package helps you create orthogonal grain boundary supercells for atomistic calculations. The code is based on the 
 coincident site lattice (CSL) formulations for cubic materials (sc, bcc, fcc, diamond). I intend to extend it to hcp structures soon.
-This code produces a final structure to be read in [LAMMPS](https://lammps.sandia.gov/).
+This code produces a final structure to be read in [LAMMPS](https://lammps.sandia.gov/).  
+If you want to run DFT calculations you can use [Ovito](https://ovito.org/index.php/download) to output a POSCAR file from this LAMMPS input structure.
 
 # Structure
 There are two main scripts: [_csl_generator.py_](./csl_generator.py) and [_gb_generator.py_](./csl_generator.py) which you need to use in this order to produce the final grain boundary (GB) structure.
@@ -149,7 +150,9 @@ The following is a one of these 50 GBs visualized by [Ovito](https://ovito.org/i
 - _**A note on the microscopic degrees of freedom:**_  
 
 In the absence of a consensus on how to find the global minimum energy GB structure I have used atom removal and/or rigid body translations according to the description above to find the minimized structure. For rigid body translations, the smallest translation vector to guarantee the minimum energy structure is not well defined, therefore you can make the mesh as dense as you wish by choosing larger a and b values. By trial and error in fcc elemental cases (such as Al and Cu) I have come to the rule of thumb conclusion of 50 
-to 100 initial structures.    
+to 100 initial structures that need to be minimized to find the minimum energy GB.  
+In the end you make a decision based on your purpose, the accuracy you need and the computational cost of running minimization on several 
+input structures.  
 If you are a more rigorous user, you can just create the GB structure with no atom removal or rigid body translations and run a more involved minimum energy search routine.
 
 - _**A note on the minimization procedure:**_  
