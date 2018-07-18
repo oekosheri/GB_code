@@ -1,5 +1,17 @@
 
 #!/usr/bin/env python
+"""
+This module produces GB structures. You need to run csl_generator first
+to get the info necessary for your grain boundary of interest.
+
+ The code runs in one mode only and takes all the necessary options to write
+ a final GB structure from the input io_file, which is written  after you run
+ csl_generator.py. You must customize the io_file that comes with some default
+ values. For ex.: input the GB_plane of interest from  running the CSl_generator
+ in the second mode. Once you have completed customizing the io_file, run:
+
+ 'python gb_generator.py io_file'
+ """
 
 import sys
 import numpy as np
@@ -7,19 +19,11 @@ from numpy import dot, cross
 from numpy.linalg import det, norm
 import csl_generator as cslgen
 
-Usage = """
 
- The code runs in one mode only and takes all necessary options to
- write a final GB structure from the input io_file, which is written
- after you run csl_generator.py. Add the GB_plane of interest from the
- CS planes list (GB1) after running csl_generator.py in second mode.
-
- "python gb_generator.py io_file"
-
- """
-# A grain boundary class, encompassing all the characteristics of a GB
 class GB_character:
-
+    """
+    a grain boundary class, encompassing all the characteristics of a GB.
+    """
     def __init__(self):
         self.axis = np.array([1, 0, 0])
         self.sigma = 1
@@ -45,6 +49,9 @@ class GB_character:
         self.trans = False
 
     def ParseGB(self, axis, basis, LatP, m, n, gb):
+        """
+        parses the GB input.
+        """
         self.axis = np.array(axis)
         self.m = int(m)
         self.n = int(n)
@@ -76,6 +83,9 @@ class GB_character:
             sys.exit()
 
     def WriteGB(self, *args):
+        """
+        parses the arguments and writes the final structure to the file.
+        """
         self.overD = float(args[0])
         if self.overD > 0:
             self.whichG = str(args[1])
@@ -143,9 +153,12 @@ class GB_character:
         else:
             print('Overlap distance is not inputted incorrectly!')
             sys.exit()
-    # The fastest way of building CSL unitcells:
+
     def CSL_Ortho_unitcell_atom_generator(self):
 
+        """
+        populates a unitcell from the orthogonal vectors.
+        """
         Or = self.ortho.T
         LoopBound = np.zeros((3, 2), dtype=float)
         transformed = []
@@ -198,8 +211,10 @@ class GB_character:
             self.Atoms = None
         return
 
-    # Build the unitcells for both grains g1 and g2:
     def CSL_Bicrystal_Atom_generator(self):
+        """
+        builds the unitcells for both grains g1 and g2.
+        """
         Or_1 = self.ortho1.T
         Or_2 = self.ortho2.T
         self.rot1 = np.array([Or_1[0, :] / norm(Or_1[0, :]),
@@ -223,8 +238,10 @@ class GB_character:
         # print(self.atoms2, norm(Or_2[0, :]) )
         return
 
-    # Expand the smallest CSL unitcell:
     def Expand_Super_cell(self):
+        """
+        expands the smallest CSL unitcell to the given dimensions.
+        """
         a = norm(self.ortho1[:, 0])
         b = norm(self.ortho1[:, 1])
         c = norm(self.ortho1[:, 2])
@@ -249,8 +266,12 @@ class GB_character:
         self.atoms2 = np.array(Y_new)
 
         return
-    # find overlapping atoms:
+
     def Find_overlapping_Atoms(self):
+
+        """
+        finds the overlapping atoms.
+        """
         IndX = np.where([self.atoms1[:, 0] < 1])[1]
         IndY = np.where([self.atoms2[:, 0] > -1])[1]
         X_new = self.atoms1[self.atoms1[:, 0] < 1]
@@ -265,8 +286,11 @@ class GB_character:
         Y_del = Y_new[indice_y]
         return (X_del, Y_del, IndX[indice_x], IndY[indice_y])
 
-    # translate the GB on a mesh created by a, b integers and write to LAMMPS:
     def Translate(self, a, b):
+
+        """
+        translates the GB on a mesh created by a, b integers and write to LAMMPS.
+        """
         tol = 0.001
         if (1 - cslgen.ang(self.gbplane, self.axis) < tol):
 
@@ -305,8 +329,10 @@ class GB_character:
                 self.atoms1 = atoms1_new
                 self.Write_to_Lammps(count)
 
-    # Write a single GB without translations to LAMMPS:
     def Write_to_Lammps(self, trans):
+        """
+        write a single GB without translations to LAMMPS.
+        """
         name = 'input_G'
         plane = str(self.gbplane[0])+str(self.gbplane[1])+str(self.gbplane[2])
         if self.overD > 0:
@@ -402,7 +428,7 @@ def main():
             gbI.WriteGB(overlap, rigid, dim1, dim2, dim3)
 
     else:
-        print(Usage)
+        print(__doc__)
     return
 
 

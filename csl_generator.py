@@ -1,36 +1,40 @@
 #!/usr/bin/env python
 
-import sys
-import random
-from math import degrees, atan, sqrt, pi, ceil, cos, acos, sin, gcd, radians
-import numpy as np
-from numpy import array, dot, cross
-from numpy.linalg import det, norm, inv
-
-Usage = """
-
- The code runs in two modes.
+"""
+This module is a collection of functions that produce CSL properties.
+When run from the terminal, the code runs in two modes.
 
  First mode:
-  "python CSLgenerator.py axis(u v w) [limit]" ----->  Where the u v w are the
+  'python CSLgenerator.py axis(u v w) [limit]' ----->  Where the u v w are the
   indices of the rotation axis such as 1 0 0, 1 1 1, 1 1 0 and so on. The limit
   is the maximum Sigma of interest.
   (the limit by default: 100)
 
  Second mode:
- "python CSLgenerator.py axis(u v w) basis sigma [limit]" -----> Where basis is
+ 'python CSLgenerator.py axis(u v w) basis sigma [limit]' -----> Where basis is
   either fcc, bcc, diamond or sc. You read the sigma of interest from the first
   mode run. The limit here refers to CSL GB inclinations. The bigger the limit,
   the higher the indices of CSL planes.
   (the limit by default: 2)
 
   your chosen axis, basis and sigma will be written to an io_file which will
-  later be read by gb_geberator.py
- """
+  later be read by gb_geberator.py.
+"""
 
-# CSL analytical formula based on
-# 'Interfaces in crystalline materials', Sutton and Balluffi, clarendon press, 1996.
+import sys
+import random
+from math import degrees, atan, sqrt, pi, ceil, cos, acos, sin, gcd, radians
+import numpy as np
+from numpy import dot, cross
+from numpy.linalg import det, norm, inv
+
+
 def get_cubic_sigma(uvw, m, n=1):
+    """
+    CSL analytical formula based on the book: 'Interfaces in crystalline materials',
+     Sutton and Balluffi, clarendon press, 1996.
+     generates possible sigma values given an axis and two int m and n.
+    """
     u, v, w = uvw
     sqsum = u*u + v*v + w*w
     sigma = m*m + n*n * sqsum
@@ -40,6 +44,9 @@ def get_cubic_sigma(uvw, m, n=1):
 
 
 def get_cubic_theta(uvw, m, n=1):
+    """
+    generates possible theta values given an axis and two int m and n.
+    """
     u, v, w = uvw
     sqsum = u*u + v*v + w*w
     if m > 0:
@@ -47,8 +54,12 @@ def get_cubic_theta(uvw, m, n=1):
     else:
         return pi
 
-# produce the smallest angle for a given sigma
+
 def get_theta_m_n_list(uvw, sigma):
+    """
+    returnes a list of sigma boundaries for a given sigma threshold.
+    the smallest angles have been taken into account.
+    """
     if sigma == 1:
         return [(0., 0., 0.)]
     thetas = []
@@ -64,9 +75,10 @@ def get_theta_m_n_list(uvw, sigma):
                 thetas.sort(key=lambda x: x[0])
     return thetas
 
-# produce a list of sigma for a given axis
 def print_list(uvw, limit):
-
+    """
+    prints a list of sigmas/angles for a given axis.
+    """
     for i in range(limit):
         tt = get_theta_m_n_list(uvw, i)
         if len(tt) > 0:
@@ -74,13 +86,15 @@ def print_list(uvw, limit):
             print("Sigma:   {0:3d}  Theta:  {1:5.2f} "
                   .format(i, degrees(theta)))
 
-# The rotation matrix
 def rot(a, Theta):
+    """
+    produces a rotation matrix from the angle and axis.
+    """
     c = cos(Theta)
     s = sin(Theta)
     a = a / norm(a)
     ax, ay, az = a
-    return array([[c + ax * ax * (1 - c), ax * ay * (1 - c) - az * s,
+    return np.array([[c + ax * ax * (1 - c), ax * ay * (1 - c) - az * s,
                    ax * az * (1 - c) + ay * s],
                   [ay * ax * (1 - c) + az * s, c + ay * ay * (1 - c),
                    ay * az * (1 - c) - ax * s],
@@ -91,12 +105,16 @@ def rot(a, Theta):
 # Helpful Functions:
 #-------------------#
 
-# make sure you have an integer array
 def integer_array(A, tol=1e-7):
+    """
+    returns an integer array.
+    """
     return np.all(abs(np.round(A) - A) < tol)
 
-# angle between two vectors
 def angv(a, b):
+    """
+    returns the angle between two vectors.
+    """
     ang = acos(np.round(dot(a, b)/norm(a)/norm(b), 8))
     return round(degrees(ang), 7)
 
@@ -104,8 +122,10 @@ def ang(a, b):
     ang = np.round(dot(a, b)/norm(a)/norm(b), 7)
     return abs(ang)
 
-# returns reduced vector and the common factor
 def CommonDivisor(a):
+    """
+    returns the reduced vector and the common factor of vector a.
+    """
     CommFac = []
     a = np.array(a)
     for i in range(2, 100):
@@ -114,9 +134,10 @@ def CommonDivisor(a):
             CommFac.append(i)
     return(a.astype(int), (abs(np.prod(CommFac))))
 
-# returns the smallest multiple integer to make an integer array
-# (Look at the 200 limit!)
 def SmallestInteger(a):
+    """
+    returns the smallest multiple integer to make an integer array.
+    """
     a = np.array(a)
     for i in range(1, 200):
         testV = i * a
@@ -124,9 +145,10 @@ def SmallestInteger(a):
             break
     return (testV, i) if integer_array(testV) else None
 
-# arr is a 2 dimensional array of vectors, returns cubic symmetric eqivalents
-# of each vector
 def SymmEquivalent(arr):
+    """
+    returns cubic symmetric eqivalents of the given 2 dimensional vector.
+    """
     Sym = np.zeros([24, 3, 3])
     Sym[0, :] = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
     Sym[1, :] = [[1, 0, 0], [0, -1, 0], [0, 0, -1]]
@@ -161,8 +183,10 @@ def SymmEquivalent(arr):
     Result = np.array(Result)
     return (np.unique(Result, axis=0))
 
-# returns the tilt and twist component of a given GB plane:
 def Tilt_Twist_comp(v1, uvw, m, n):
+    """
+    returns the tilt and twist components of a given GB plane.
+    """
     theta = get_cubic_theta(uvw, m, n)
     R = rot(uvw, theta)
     v2 = np.round(dot(R, v1), 6).astype(int)
@@ -176,8 +200,10 @@ def Tilt_Twist_comp(v1, uvw, m, n):
                      .format(tilt, twist))
 
 
-# Generate GB planes and specify the character #
 def Create_Possible_GB_Plane_List(uvw, m=5, n=1, lim=5):
+    """
+    generate GB planes and specifies the character.
+    """
     uvw = np.array(uvw)
     Theta = get_cubic_theta(uvw, m, n)
     Sigma = get_cubic_sigma(uvw, m, n)
@@ -236,8 +262,11 @@ def Create_Possible_GB_Plane_List(uvw, m=5, n=1, lim=5):
 
     return (V1, V2, MeanPlanes, GBtype)
 
-# Find Minimal cell by my method (An alternative analytical method can be used too):
 def Create_minimal_cell_Method_1(sigma, uvw, R):
+    """
+    finds Minimal cell by means of a numerical search.
+    (An alternative analytical method can be used too).
+    """
     uvw = np.array(uvw)
     MiniCell_1 = np.zeros([3, 3])
     MiniCell_1[:, 2] = uvw
@@ -249,7 +278,6 @@ def Create_minimal_cell_Method_1(sigma, uvw, R):
     indice = (np.stack(np.meshgrid(x, y, z)).T).reshape(len(x) ** 3, 3)
 
     # remove 0 vectors and uvw from the list
-
     indice_0 = indice[np.where(np.sum(abs(indice), axis=1) != 0)]
     condition1 = ((abs(dot(indice_0, uvw) / norm(indice_0, axis=1) /
                   norm(uvw))).round(7))
@@ -304,8 +332,10 @@ def MiniCell_search(indices, MiniCell_1, R, sigma):
     else:
         return (Found)
 
-# Defining the basis
 def Basis(basis):
+    """
+    defines the basis.
+    """
     # Cubic basis
     if str(basis) == 'fcc':
         basis = np.array([[0, 0, 0],
@@ -333,8 +363,10 @@ def Basis(basis):
 
     return (basis)
 
-# Find Orthogonal cells from the minimal cells:
 def Find_Orthogonal_cell(basis, uvw, m, n, GB1):
+    """
+    finds Orthogonal cells from the CSL minimal cells.
+    """
     # Changeable limit
     lim = 15
     uvw = np.array(uvw)
@@ -402,9 +434,10 @@ def Find_Orthogonal_cell(basis, uvw, m, n, GB1):
     else:
         return None
 
-# print lists of GB planes given an axis, basis, m and n :
 def print_list_GB_Planes(uvw, basis, m, n, lim=3):
-
+    """
+    prints lists of GB planes given an axis, basis, m and n.
+    """
     uvw = np.array(uvw)
     V1, V2, Mean, Type = Create_Possible_GB_Plane_List(uvw, m, n, lim)
     for i in range(len(V1)):
@@ -513,8 +546,10 @@ def face_centering(a):
 
     return (z_f if det(z_f) == 0.25 else None)
 
-# A DSC cell
 def DSC_vec(basis, sigma, minicell):
+    """
+    a DSC network for the given sigma and minimal cell.
+    """
     D_sc = np.round(sigma * (inv(minicell).T), 6).astype(int)
     if basis == 'sc':
         D = D_sc.copy()
@@ -524,8 +559,10 @@ def DSC_vec(basis, sigma, minicell):
         D = dot(D_sc, face_centering(D_sc))
     return (D)
 
-# Your CSL cell for sc, fcc and bcc. For diamond use fcc.
 def CSL_vec(basis, minicell):
+    """
+    your CSL cell for sc, fcc and bcc.
+    """
     C_sc = minicell.copy()
     if basis == 'sc':
         C = C_sc.copy()
@@ -535,9 +572,10 @@ def CSL_vec(basis, minicell):
         C = dot(C_sc, face_centering(C_sc))
     return (C)
 
-# The projected DSC cell on the plane of interest.
 def DSC_on_plane(D, Pnormal):
-
+    """
+    projects the given DSC network on the given plane.
+    """
     D_proj = np.zeros((3, 3))
     Pnormal = np.array(Pnormal)
     for i in range(3):
@@ -545,9 +583,11 @@ def DSC_on_plane(D, Pnormal):
                         Pnormal/norm(Pnormal))
     return (D_proj)
 
-# The density of CSL points on a given plane
+
 def CSL_density(basis, minicell, plane):
-    " returns CSL density of the given plane and its d_spacing "
+    """
+     returns the CSL density of the given plane and its d_spacing.
+    """
     plane = np.array(plane)
     C = CSL_vec(basis, minicell)
     h = dot(C.T,plane)
@@ -640,7 +680,7 @@ def main():
 
     if (len(sys.argv) != 4 and len(sys.argv) != 5 and len(sys.argv) != 6 and
             len(sys.argv) != 7):
-        print(Usage)
+        print(__doc__)
     else:
         uvw = np.array([int(sys.argv[1]), int(sys.argv[2]), int(sys.argv[3])])
 
@@ -661,7 +701,7 @@ def main():
         except:
             print("""
                 Careful! limit must be an integer ...
-                  """, Usage)
+                  """, __doc__)
 
     if len(sys.argv) == 6:
 
