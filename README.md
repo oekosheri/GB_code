@@ -161,8 +161,8 @@ similar to a procedure explained [here](https://icme.hpc.msstate.edu/mediawiki/i
 For the annealing simulations I use an _nvt_ ensemble followed by damped dynamics. Depending on the GB structure and your final purpose you can run annealing simulations for different time spans.
 # Questions  
 
-If you have any questions, raise an issue or contact [me](mailto:shahrzadhadian@gmail.com). 
-Feel free to use the code anyway you like but if you find it useful please cite this page or the attached paper.
+If you have any questions, raise an issue or contact [me](mailto:shahrzadhadian@gmail.com).  
+Feel free to use the code anyway you like, if you find it useful please cite this page or the attached paper.
 
 # License
 [MIT](./LICENSE).
