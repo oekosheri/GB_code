@@ -141,7 +141,7 @@ To produce the GB of interest we go on with: [_gb_generator.py_](./gb_generator.
 <<------ 50 GB structures are being created! ------>>
 ```
 The following is one of these 50 GBs visualized by [Ovito](https://ovito.org/index.php/download):  
-The color code recognizes the diamond structure as bulk (blue) and non-bulk atoms are GB atoms. In the middle lies the GB and on both up and bottom of the cell you have halves of an equivalent GB.  
+The color code distinguishes the diamond structure as bulk (blue) and non-bulk atoms are GB atoms. In the middle lies the GB and on both up and bottom of the cell you have halves of an equivalent GB.  
 
 <img src="./exGB.png" width="50%">
 
@@ -149,7 +149,7 @@ The color code recognizes the diamond structure as bulk (blue) and non-bulk atom
 
 In the absence of a consensus on how to find the global minimum energy GB structure I have used atom removal and/or rigid body translations according to the description above to find the minimized structure. For rigid body translations, the smallest translation vector to guarantee the minimum energy structure is not well defined, therefore you can make the mesh as dense as you wish by choosing larger a and b values. By trial and error in fcc elemental cases (such as Al and Cu) I have come to the rule of thumb conclusion of 50 
 to 100 initial structures that need to be minimized to find the minimum energy GB.  
-In the end you make a decision based on the accuracy you need and the computational cost of running minimization on several 
+In the end you must find a crossover between the accuracy you need and the computational cost of running minimization on several 
 input structures.  
 If you are a more rigorous user, you can just create the GB structure with no atom removal or rigid body translations and run a more involved minimum energy search routine.
 
