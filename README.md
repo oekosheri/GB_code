@@ -4,7 +4,7 @@ If you want to run DFT calculations you can use [Ovito](https://ovito.org/index.
 
 # Structure
 There are two main scripts: [_csl_generator.py_](./csl_generator.py) and [_gb_generator.py_](./csl_generator.py) which you need to use in this order to produce the final grain boundary (GB) structure.  
-In this README I will explain the steps to use the code in the Terminal and I have also attached two _jupyter notebooks_ ([Usage_of_GB_code.ipynb](./Usage_of_GB_code.ipynb), [Dichromatic_pattern_CSL_.ipynb](./Dichromatic_pattern_CSL_.ipynb)) which describe how the code be can be accessed and used in the notebooks by various examples. These notebooks have extra functionality. The former is for the general usage of the code and some tips to locate GBs of interest, the latter depicts how CSL construction can be used for different purposes.  
+In this README I will explain the steps to use the code in the Linux Terminal and I have also attached two _jupyter notebooks_ ([Usage_of_GB_code.ipynb](./Usage_of_GB_code.ipynb), [Dichromatic_pattern_CSL_.ipynb](./Dichromatic_pattern_CSL_.ipynb)) which describe how the code be can be accessed and used in the notebooks by various examples. These notebooks have extra functionality. The former is for the general usage of the code with some tips to locate GBs of interest, the latter depicts how CSL construction can be used for different purposes.  
 You can use [this link](https://mybinder.org/v2/gh/oekosheri/GB_code/master) for an interactive Jupyter notebook environment provided by Binder. [![Binder](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/oekosheri/GB_code/master)  
 
 # Usage
@@ -70,15 +70,15 @@ _Second mode:
 ```
 Which you can write to a file if you wish.
 
-Your chosen axis, basis and sigma will be written to an io_file (a yaml file) which will be read by gb_geberator.py. 
-You must customize the io_file and then run the gb_geberator.py code after to get the atomic structure of the GB. This is 
+Your chosen axis, basis and sigma will be written to an io_file (a yaml file) which will be read by gb_generator.py. 
+You must customize the io_file and then run the gb_generator.py code after to get the atomic structure of the GB. This is 
 how the io_file looks like right now:
 
 ```
 ### input parameters for gb_generator.py ###
-# CSL plane of interest that you read from the output ofcsl_generator as GB1
+# CSL plane of interest that you read from the output of csl_generator as GB1
 GB_plane: [1,1,1]
-# lattic parameter in Angstrom
+# lattice parameter in Angstrom
 
 lattice_parameter: 4
 # atoms that are closer than this fraction of the lattice parameter will be removed
@@ -124,14 +124,14 @@ To minimize the grain boundary energy, microscopic degrees of freedom must be ta
 
 (2) will be achieved by
 
--  rigid_trans: yes or no. If no, the following a and b will be disregarded. For any grain boundary type except the twist boundary, the smallest inplane unit that must be scanned comprises the unitcell formed by the smallest orthogonal CSL vectors on the GB plane. These vectors will be divided by the following a and b integers to produce a grid on which the boundary will be translated. Here a is used for the larger inplane vector and b for the smaller one. So by defalut I produce _5 * 10 = 50_ initial structures to be minimized for finding the lowest energy structure. The higher your chosen a and b, the denser the grid.  
+-  rigid_trans: yes or no. If no, the following a and b will be disregarded. For any grain boundary type except the twist boundary, the smallest inplane unit that must be scanned comprises the unitcell formed by the smallest orthogonal CSL vectors on the GB plane. These vectors will be divided by the following a and b integers to produce a grid upon which the boundary will be translated. Here a is used for the larger inplane vector and b for the smaller one. So by defalut I produce _5 * 10 = 50_ initial structures to be minimized for finding the lowest energy structure. The higher your chosen a and b, the denser the grid.  
 For the twist grain boundary the smallest unit that needs to be scanned is the unitcell created by the DSC vectors (the smallest repeat vectors of the CSL) and the code will handle it internally. 
 - a: 10
 - b: 5
 
 You can choose a combination of atom remmoval and rigid body translation for finding the minimum energy GB. 
  
-- dimensions: Finally the supercell dimensions according to the io_file.
+- dimensions: Finally the supercell dimensions according to the io_file. Make sure you always choose a large enough l1 dimension that the Gb and its periodic image do not interact.
 
 As an example, we change the default gb_plane to [2,  1, -2] and rigid_trans to 'yes' in the io_file.  
 To produce the GB of interest we go on with: [_gb_generator.py_](./gb_generator.py)
@@ -141,6 +141,7 @@ To produce the GB of interest we go on with: [_gb_generator.py_](./gb_generator.
 <<------ 50 GB structures are being created! ------>>
 ```
 The following is a one of these 50 GBs visualized by [Ovito](https://ovito.org/index.php/download):  
+The color code recognizes the diamond structure as bulk (blue) and non-bulk atoms are GB atoms. In the middle lies the GB and on both up and bottom of the cell you have halves of an equivalent GB.  
 
 <img src="./exGB.png" width="50%">
 
@@ -160,8 +161,8 @@ similar to a procedure explained [here](https://icme.hpc.msstate.edu/mediawiki/i
 For the annealing simulations I use an _nvt_ ensemble followed by damped dynamics. Depending on the GB structure and your final purpose you can run annealing simulations for different time spans.
 # Questions  
 
-If you have any questions, rasie an issue or contact [me](mailto:shahrzadhadian@gmail.com). 
-
+If you have any questions, raise an issue or contact [me](mailto:shahrzadhadian@gmail.com). 
+Feel free to use the code anyway you like but if you find it useful please cite this page or the attached paper.
 
 # License
 [MIT](./LICENSE).
