@@ -17,7 +17,7 @@ Usage = """
  "python gb_generator.py io_file"
 
  """
-
+# A grain boundary class, encompassing all the characteristics of a GB
 class GB_character:
 
     def __init__(self):
@@ -76,7 +76,6 @@ class GB_character:
             sys.exit()
 
     def WriteGB(self, *args):
-
         self.overD = float(args[0])
         if self.overD > 0:
             self.whichG = str(args[1])
@@ -137,16 +136,15 @@ class GB_character:
                     print('Make sure the input arguments are right!')
                     sys.exit()
                 self.dim = np.array([int(args[2]), int(args[3]), int(args[4])])
+                self.Expand_Super_cell()
                 count = 0
                 print ("<<------ 1 GB structure is being created! ------>>")
                 self.Write_to_Lammps(count)
         else:
-            print('Overlap distance is not inputted correctly!')
+            print('Overlap distance is not inputted incorrectly!')
             sys.exit()
-
+    # The fastest way of building CSL unitcells:
     def CSL_Ortho_unitcell_atom_generator(self):
-
-        # The fastest way of building unitcells:
 
         Or = self.ortho.T
         LoopBound = np.zeros((3, 2), dtype=float)
@@ -200,11 +198,10 @@ class GB_character:
             self.Atoms = None
         return
 
+    # Build the unitcells for both grains g1 and g2:
     def CSL_Bicrystal_Atom_generator(self):
-
         Or_1 = self.ortho1.T
         Or_2 = self.ortho2.T
-
         self.rot1 = np.array([Or_1[0, :] / norm(Or_1[0, :]),
                              Or_1[1, :] / norm(Or_1[1, :]),
                              Or_1[2, :] / norm(Or_1[2, :])])
@@ -226,6 +223,7 @@ class GB_character:
         # print(self.atoms2, norm(Or_2[0, :]) )
         return
 
+    # Expand the smallest CSL unitcell:
     def Expand_Super_cell(self):
         a = norm(self.ortho1[:, 0])
         b = norm(self.ortho1[:, 1])
@@ -251,9 +249,8 @@ class GB_character:
         self.atoms2 = np.array(Y_new)
 
         return
-
+    # find overlapping atoms:
     def Find_overlapping_Atoms(self):
-
         IndX = np.where([self.atoms1[:, 0] < 1])[1]
         IndY = np.where([self.atoms2[:, 0] > -1])[1]
         X_new = self.atoms1[self.atoms1[:, 0] < 1]
@@ -268,10 +265,9 @@ class GB_character:
         Y_del = Y_new[indice_y]
         return (X_del, Y_del, IndX[indice_x], IndY[indice_y])
 
+    # translate the GB on a mesh created by a, b integers and write to LAMMPS:
     def Translate(self, a, b):
-
         tol = 0.001
-
         if (1 - cslgen.ang(self.gbplane, self.axis) < tol):
 
             M1, M2 = cslgen.Create_minimal_cell_Method_1(
@@ -309,8 +305,8 @@ class GB_character:
                 self.atoms1 = atoms1_new
                 self.Write_to_Lammps(count)
 
+    # Write a single GB without translations to LAMMPS:
     def Write_to_Lammps(self, trans):
-
         name = 'input_G'
         plane = str(self.gbplane[0])+str(self.gbplane[1])+str(self.gbplane[2])
         if self.overD > 0:
@@ -362,9 +358,7 @@ class GB_character:
 
 
 def main():
-
     import yaml
-
     if len(sys.argv) == 2:
         io_file = sys.argv[1]
         file = open(io_file, 'r')
