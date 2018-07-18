@@ -28,7 +28,8 @@ Usage = """
   later be read by gb_geberator.py
  """
 
-
+# CSL analytical formula based on
+# 'Interfaces in crystalline materials', Sutton and Balluffi, clarendon press, 1996.
 def get_cubic_sigma(uvw, m, n=1):
     u, v, w = uvw
     sqsum = u*u + v*v + w*w
@@ -46,7 +47,7 @@ def get_cubic_theta(uvw, m, n=1):
     else:
         return pi
 
-
+# produce the smallest angle for a given sigma
 def get_theta_m_n_list(uvw, sigma):
     if sigma == 1:
         return [(0., 0., 0.)]
@@ -63,7 +64,7 @@ def get_theta_m_n_list(uvw, sigma):
                 thetas.sort(key=lambda x: x[0])
     return thetas
 
-
+# produce a list of sigma for a given axis
 def print_list(uvw, limit):
 
     for i in range(limit):
@@ -73,14 +74,12 @@ def print_list(uvw, limit):
             print("Sigma:   {0:3d}  Theta:  {1:5.2f} "
                   .format(i, degrees(theta)))
 
-
+# The rotation matrix
 def rot(a, Theta):
     c = cos(Theta)
     s = sin(Theta)
     a = a / norm(a)
-    ax = a[0]
-    ay = a[1]
-    az = a[2]
+    ax, ay, az = a
     return array([[c + ax * ax * (1 - c), ax * ay * (1 - c) - az * s,
                    ax * az * (1 - c) + ay * s],
                   [ay * ax * (1 - c) + az * s, c + ay * ay * (1 - c),
@@ -90,23 +89,22 @@ def rot(a, Theta):
 
 
 # Helpful Functions:
+#-------------------#
 
+# make sure you have an integer array
 def integer_array(A, tol=1e-7):
     return np.all(abs(np.round(A) - A) < tol)
 
-
+# angle between two vectors
 def angv(a, b):
     ang = acos(np.round(dot(a, b)/norm(a)/norm(b), 8))
     return round(degrees(ang), 7)
-
 
 def ang(a, b):
     ang = np.round(dot(a, b)/norm(a)/norm(b), 7)
     return abs(ang)
 
 # returns reduced vector and the common factor
-
-
 def CommonDivisor(a):
     CommFac = []
     a = np.array(a)
@@ -116,9 +114,8 @@ def CommonDivisor(a):
             CommFac.append(i)
     return(a.astype(int), (abs(np.prod(CommFac))))
 
-# returns smallest multiple integer to make an integer array
-
-
+# returns the smallest multiple integer to make an integer array
+# (Look at the 200 limit!)
 def SmallestInteger(a):
     a = np.array(a)
     for i in range(1, 200):
@@ -127,11 +124,9 @@ def SmallestInteger(a):
             break
     return (testV, i) if integer_array(testV) else None
 
-
-# array is a 2 dimensional array of vectors, returns cubic symmetric eqivalents
+# arr is a 2 dimensional array of vectors, returns cubic symmetric eqivalents
 # of each vector
-
-def SymmEquivalent(array):
+def SymmEquivalent(arr):
     Sym = np.zeros([24, 3, 3])
     Sym[0, :] = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
     Sym[1, :] = [[1, 0, 0], [0, -1, 0], [0, 0, -1]]
@@ -158,17 +153,15 @@ def SymmEquivalent(array):
     Sym[22, :] = [[0, 0, 1], [0, -1, 0], [1, 0, 0]]
     Sym[23, :] = [[0, 0, 1], [0, 1, 0], [-1, 0, 0]]
 
-    array = np.atleast_2d(array)
+    arr = np.atleast_2d(arr)
     Result = []
     for i in range(len(Sym)):
-        for j in range(len(array)):
-            Result.append(dot(Sym[i, :], array[j]))
+        for j in range(len(arr)):
+            Result.append(dot(Sym[i, :], arr[j]))
     Result = np.array(Result)
     return (np.unique(Result, axis=0))
 
 # returns the tilt and twist component of a given GB plane:
-
-
 def Tilt_Twist_comp(v1, uvw, m, n):
     theta = get_cubic_theta(uvw, m, n)
     R = rot(uvw, theta)
@@ -180,11 +173,10 @@ def Tilt_Twist_comp(v1, uvw, m, n):
     else:
         twist = 2 * acos(cos(theta / 2) / cos(radians(tilt / 2)))
         print("Tilt component: {0:<6.2f} Twist component: {1:6.2f}"
-              .format(tilt, twist))
+                     .format(tilt, twist))
 
 
 # Generate GB planes and specify the character #
-
 def Create_Possible_GB_Plane_List(uvw, m=5, n=1, lim=5):
     uvw = np.array(uvw)
     Theta = get_cubic_theta(uvw, m, n)
@@ -192,7 +184,6 @@ def Create_Possible_GB_Plane_List(uvw, m=5, n=1, lim=5):
     R1 = rot(uvw, Theta)
 
     # List and character of possible GB planes:
-
     x = np.arange(-lim, lim + 1, 1)
     y = x
     z = x
@@ -215,7 +206,6 @@ def Create_Possible_GB_Plane_List(uvw, m=5, n=1, lim=5):
                    [1, 0, 1],
                    ], dtype='float')
     # Find GB plane coordinates:
-
     for i in range(len(indice_0)):
         if (CommonDivisor(indice_0[i])[1] <= 1):
             V1[i, :] = (indice_0[i, 0] * Min_1[:, 0] +
@@ -230,7 +220,6 @@ def Create_Possible_GB_Plane_List(uvw, m=5, n=1, lim=5):
     MeanPlanes = (V1 + V2) / 2
 
     # Check the type of GB plane: Symmetric tilt, tilt, twist
-
     for i in range(len(V1)):
         if ang(V1[i], uvw) < tol:
 
@@ -247,12 +236,9 @@ def Create_Possible_GB_Plane_List(uvw, m=5, n=1, lim=5):
 
     return (V1, V2, MeanPlanes, GBtype)
 
-# ------------------------Find Minimal cell by my method-----------------:
-
-
+# Find Minimal cell by my method (An alternative analytical method can be used too):
 def Create_minimal_cell_Method_1(sigma, uvw, R):
     uvw = np.array(uvw)
-
     MiniCell_1 = np.zeros([3, 3])
     MiniCell_1[:, 2] = uvw
 
@@ -288,15 +274,12 @@ def MiniCell_search(indices, MiniCell_1, R, sigma):
 
     Found = False
     count = 0
-
     while (not Found) and count < len(TestVecs) - 1:
-
         if (1 - ang(TestVecs[count], MiniCell_1[:, 2]) > tol):
             # and  (ang(TestVecs[i],uvw) > tol):
             MiniCell_1[:, 1] = (TestVecs[count])
             count += 1
             for j in range(len(TestVecs)):
-
                 if (1 - ang(TestVecs[j], MiniCell_1[:, 2]) > tol) and (
                         1 - ang(TestVecs[j], MiniCell_1[:, 1]) > tol):
                     if (ang(TestVecs[j],
@@ -321,11 +304,9 @@ def MiniCell_search(indices, MiniCell_1, R, sigma):
     else:
         return (Found)
 
-
+# Defining the basis
 def Basis(basis):
-
     # Cubic basis
-
     if str(basis) == 'fcc':
         basis = np.array([[0, 0, 0],
                          [0.5, 0, 0.5],
@@ -352,11 +333,8 @@ def Basis(basis):
 
     return (basis)
 
-# Find Orthogonal cells:
-
-
+# Find Orthogonal cells from the minimal cells:
 def Find_Orthogonal_cell(basis, uvw, m, n, GB1):
-
     # Changeable limit
     lim = 15
     uvw = np.array(uvw)
@@ -402,7 +380,6 @@ def Find_Orthogonal_cell(basis, uvw, m, n, GB1):
     # OrthoCell_2 = OrthoCell_2
     # Test
     # OrthoCell_3 = (dot(R, OrthoCell_1))
-
     Volume_1 = (round(det(OrthoCell_1), 5))
     Volume_2 = (round(det(OrthoCell_2), 5))
     Num = Volume_1 * len(Basis(basis)) * 2
@@ -425,9 +402,7 @@ def Find_Orthogonal_cell(basis, uvw, m, n, GB1):
     else:
         return None
 
-# print lists of GB planes:
-
-
+# print lists of GB planes given an axis, basis, m and n :
 def print_list_GB_Planes(uvw, basis, m, n, lim=3):
 
     uvw = np.array(uvw)
@@ -441,9 +416,9 @@ def print_list_GB_Planes(uvw, basis, m, n, lim=3):
 
 # ___CSL/DSC vector construction___#
 
-# According to Grimmer, DSC and CSL lattices for bcc and fcc were made from the
-# Sc lattice via body_centering and face_centering:
-
+# According to Grimmer et al. (Acta Cryst. (1974). A30, 197-207) ,
+#  DSC and CSL lattices for bcc and fcc were made from the Sc lattice
+# via body_centering and face_centering:
 def odd_even(M1):
     d_e = np.array([['a', 'a', 'a'],
                     ['a', 'a', 'a'],
@@ -538,7 +513,7 @@ def face_centering(a):
 
     return (z_f if det(z_f) == 0.25 else None)
 
-
+# A DSC cell
 def DSC_vec(basis, sigma, minicell):
     D_sc = np.round(sigma * (inv(minicell).T), 6).astype(int)
     if basis == 'sc':
@@ -549,7 +524,7 @@ def DSC_vec(basis, sigma, minicell):
         D = dot(D_sc, face_centering(D_sc))
     return (D)
 
-
+# Your CSL cell for sc, fcc and bcc. For diamond use fcc.
 def CSL_vec(basis, minicell):
     C_sc = minicell.copy()
     if basis == 'sc':
@@ -560,7 +535,7 @@ def CSL_vec(basis, minicell):
         C = dot(C_sc, face_centering(C_sc))
     return (C)
 
-
+# The projected DSC cell on the plane of interest.
 def DSC_on_plane(D, Pnormal):
 
     D_proj = np.zeros((3, 3))
@@ -570,7 +545,7 @@ def DSC_on_plane(D, Pnormal):
                         Pnormal/norm(Pnormal))
     return (D_proj)
 
-
+# The density of CSL points on a given plane
 def CSL_density(basis, minicell, plane):
     " returns CSL density of the given plane and its d_spacing "
     plane = np.array(plane)
@@ -583,7 +558,8 @@ def CSL_density(basis, minicell, plane):
     density = 1/(hnorm * det(C))
     return (abs(density),1/hnorm)
 
-
+# An auxilary function to help reduce the size of the small orthogonal cell that
+#  is decided otherwise based on Sc for fcc and bcc
 def Ortho_fcc_bcc(basis, O1, O2):
     ortho1 = np.zeros((3, 3))
     ortho2 = np.zeros((3, 3))
@@ -600,7 +576,7 @@ def Ortho_fcc_bcc(basis, O1, O2):
         ortho2[:, i] = O2[:, i] / Min_d
     return (ortho1, ortho2)
 
-
+# Writing to a yaml file that will be read by gb_generator
 def Write_to_io(axis, m, n, basis):
 
     my_dict = {'GB_plane': str([axis[0], axis[1], axis[2]]), 'lattice_parameter': '4',
@@ -614,7 +590,7 @@ def Write_to_io(axis, m, n, basis):
                 'csl_generator as GB1 \n \n')
         f.write(list(my_dict.keys())[0] + ': ' + list(my_dict.values())[0] +
                 '\n')
-        f.write('# lattic parameter in Angstrom \n \n')
+        f.write('# lattice parameter in Angstrom \n \n')
         f.write(list(my_dict.keys())[1] + ': ' + list(my_dict.values())[1] +
                 '\n')
         f.write('# atoms that are closer than this fraction of the lattice '
@@ -630,7 +606,7 @@ def Write_to_io(axis, m, n, basis):
                 'on the GB_plane or not (yes or no)\n')
 
         f.write('# When yes, for any GB aside from twist GBs, the two inplane \n'
-        '# CSL vecs will be divided by integers a and b to produce a*b initial \n'
+        '# CSL vectors will be divided by integers a and b to produce a*b initial \n'
         '# configurations. The default values produce 50 initial structures \n'
         '# if you choose no for rigid_trans, you do not need to care about a and b. \n'
         '# twist boundaries are handled internally \n\n')
@@ -699,7 +675,7 @@ def main():
 
             print("----------List of possible CSL planes for Sigma {}---------"
                   .format(sigma))
-            print(" GB1---------------GB2-------------Type----------"
+            print(" GB1-------------------GB2-------------------Type----------"
                   "Number of Atoms ")
             print_list_GB_Planes(uvw, basis, m, n, lim)
 
@@ -724,7 +700,7 @@ def main():
 
             print("----------List of possible CSL planes for Sigma {}---------"
                   .format(sigma))
-            print(" GB1---------------GB2-------------Type----------"
+            print(" GB1-------------------GB2-------------------Type----------"
                   "Number of Atoms ")
 
             print_list_GB_Planes(uvw, basis, m, n, lim)
