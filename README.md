@@ -141,7 +141,7 @@ To produce the GB of interest we go on with: [_gb_generator.py_](./gb_generator.
 <<------ 50 GB structures are being created! ------>>
 ```
 The following is one of these 50 GBs visualized by [Ovito](https://ovito.org/index.php/download):  
-The color code distinguishes the diamond structure as bulk (blue) and non-bulk atoms are GB atoms. In the middle lies the GB and on both up and bottom of the cell you have halves of an equivalent GB.  
+The color code distinguishes the diamond bulk structure as blue. The color changes gradually to green as we approach the GB atoms. In the middle lies the central GB and on both up and bottom of the cell you have halves of an equivalent GB (the periodic image).  
 
 <img src="./exGB.png" width="50%">
 
