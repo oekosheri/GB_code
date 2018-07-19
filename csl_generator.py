@@ -57,8 +57,7 @@ def get_cubic_theta(uvw, m, n=1):
 
 def get_theta_m_n_list(uvw, sigma):
     """
-    returnes a list of sigma boundaries for a given sigma threshold.
-    the smallest angles have been taken into account.
+    Finds integers m and n lists that match the input sigma.
     """
     if sigma == 1:
         return [(0., 0., 0.)]
@@ -77,7 +76,7 @@ def get_theta_m_n_list(uvw, sigma):
 
 def print_list(uvw, limit):
     """
-    prints a list of sigmas/angles for a given axis.
+    prints a list of smallest sigmas/angles for a given axis.
     """
     for i in range(limit):
         tt = get_theta_m_n_list(uvw, i)
