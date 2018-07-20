@@ -41,7 +41,7 @@ shown as well.
 
 ``GB_code``uses the analytical and mathematical formulations of the following works [@Sutton:1996, @Bollmann:1984, @Grimmer]. Some functionality from this code on CSL [@Marcin] has been used in a modified form in our code. To our knowledge, in comparison to other GB generation codes in different scientific groups``GB_code`` is relatively faster due its extensive usage of python Numpy library
 and is more comprehensive. The code has been designed to be simple to use and instructive with a special 
-attention to GB plane orientation which is often lacking. 
+attention to GB plane orientation which is often lacking in other grain bundary creation codes. 
 
 
 # Acknowledgements
