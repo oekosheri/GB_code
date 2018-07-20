@@ -133,7 +133,7 @@ For the twist grain boundary the smallest unit that needs to be scanned is the u
 
 You can choose a combination of atom remmoval and rigid body translation for finding the minimum energy GB. 
  
-- dimensions: Finally the supercell dimensions according to the io_file. Make sure you always choose a large enough l1 dimension that the Gb and its periodic image do not interact.
+- dimensions: Finally the supercell dimensions according to the io_file. Make sure you always choose a large enough l1 dimension that the GB and its periodic image do not interact.
 
 As an example, we change the default gb_plane to [2,  1, -2] and rigid_trans to 'yes' in the io_file.  
 To produce the GB of interest we go on with: [_gb_generator.py_](./gb_generator.py)
