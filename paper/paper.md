@@ -1,11 +1,11 @@
 ---
-title: 'GB\_code: A grain boundary generation code'
+title: 'GB_code: A grain boundary generation code'
 tags:
   - Python
   - grain boundary
   - crystallography
   - CSL
- 	- atomistic
+  - atomistic simulations
 authors:
   - name: R. Hadian
     orcid: 0000-0002-9616-4602
@@ -33,29 +33,29 @@ of materials and are therefore an essential focus of materials science and physi
 To simulate grain boundary properties using atomistic codes such as ``LAMMPS``[@LAMMPS], 
 the atomic structure of the GBs need to be generated first. These geometrical entities have a 
 large parameter space that has been well formulated within a coincident site lattice (CSL) 
-mathematical framework. ``GB\_code`` uses the CSL construction to generate GBs (currently for 
+mathematical framework. ``GB_code`` uses the CSL construction to generate GBs (currently for 
 cubic materials) systematically and provides input atomic structures for atomistic calculations. 
-In addition to this final goal, the ``csl\_generator.py`` script and the attached Jupyter notebooks
+In addition to this final goal, the ``csl_generator.py`` script and the attached Jupyter notebooks
 have extra functionality to show how the CSL properties can be used to locate, classify and categorize 
 different GBs and to extract detailed information about them; which causes it to be a good interactive 
 toolbox to learn about grain boundaries and versatile for running high-throughput calculations. 
 
 
-``GB\_code`` is mainly designed to be run in Linux terminal as it is documented in detail in the README 
+``GB_code`` is mainly designed to be run in Linux terminal as it is documented in detail in the README 
 file of the repository but it can also be accessed via the attached Jupyter notebooks. The code consists 
-of two main scripts, ``csl\_generator.py`` and ``gb\_generator.py``, that should be used in this order to
-produce the final GB structures. The attached Jupyter notebooks, ``Usage\_of\_GB\_code.ipynb`` and 
-``Dichromatic\_pattern\_CSL\_.ipynb``, can access the two scripts as modules, the former addresses the general 
+of two main scripts, ``csl_generator.py`` and ``gb_generator.py``, that should be used in this order to
+produce the final GB structures. The attached Jupyter notebooks, ``Usage_of_GB_code.ipynb`` and 
+``Dichromatic_pattern_CSL_.ipynb``, can access the two scripts as modules, the former addresses the general 
 usage of the code with some extra tips and functions to locate GBs of interest, the latter depicts how CSL 
 properties such as the overlapping patterns and displacement shift complete (DSC) vectors can be extracted 
-and visualized. Some examples of the usage of the ``GB\_code`` in our previous publications have been shown 
+and visualized. Some examples of the usage of the ``GB_code`` in our previous publications have been shown 
 as well.
 
 
-``GB\_code``uses the analytical and mathematical formulations of the following works 
+``GB_code``uses the analytical and mathematical formulations of the following works 
 [@Sutton:1996, @Bollmann:1984, @Grimmer]. Some functionality from this code on CSL [@Marcin] has been used in a 
 modified form in our code. To our knowledge, in comparison to other GB generation codes in different 
-scientific groups``GB\_code`` is relatively faster because of its extensive usage of python Numpy library
+scientific groups``GB_code`` is relatively faster due its extensive usage of python Numpy library
 and is more comprehensive. The code has been designed to be simple to use and instructive with a special 
 attention to GB plane orientation. 
 
