@@ -29,13 +29,8 @@ Grain boundaries (GBs) are crystalline borders between single crystals in materi
 role in mechanical, chemical or electronic response of materials and are therefore an essential focus of materials science
 and physics.
 
-To simulate grain boundary properties using atomistic codes such as ``LAMMPS``[@LAMMPS], 
-the atomic structure of the GBs need to be generated first. GBs are geometrical entities with a large parameter space
-that has been well formulated within a coincident site lattice (CSL) mathematical framework. ``GB_code`` uses the CSL 
-construction to generate GB atomic structures (currently for cubic materials) systematically and provides input atomic 
-structures for atomistic calculations (e.g. ``LAMMPS``[@LAMMPS]). These atomistic codes can further calculate different 
-properties of the GBs. In addition to providing the input structures, the ``csl_generator.py`` script and the attached 
-Jupyter notebooks have extra functionality to show how the CSL properties can be used to locate, classify and categorize 
+GBs are geometrical entities with a large parameter space that has been well formulated within a coincident site lattice (CSL) mathematical framework. ``GB_code`` uses the CSL construction to generate GB atomic structures (currently for cubic materials) systematically and provides input atomic structures for atomistic calculations (e.g. ``LAMMPS``[@LAMMPS]). These atomistic codes can further calculate different properties of the GBs. In addition to providing the input structures, the ``csl_generator.py`` script and
+the attached Jupyter notebooks have extra functionality to show how the CSL properties can be used to locate, classify and categorize 
 different GBs and to extract detailed information about them; which causes it to be a good interactive toolbox to learn 
 about grain boundaries and versatile for running high-throughput calculations. 
 
