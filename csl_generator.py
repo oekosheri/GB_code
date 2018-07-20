@@ -106,7 +106,7 @@ def rot(a, Theta):
 
 def integer_array(A, tol=1e-7):
     """
-    returns an integer array.
+    returns True if an array is ineteger.
     """
     return np.all(abs(np.round(A) - A) < tol)
 
@@ -118,6 +118,9 @@ def angv(a, b):
     return round(degrees(ang), 7)
 
 def ang(a, b):
+    """
+    returns the cos(angle) between two vectors.
+    """
     ang = np.round(dot(a, b)/norm(a)/norm(b), 7)
     return abs(ang)
 
@@ -291,6 +294,9 @@ def Create_minimal_cell_Method_1(sigma, uvw, R):
 
 
 def MiniCell_search(indices, MiniCell_1, R, sigma):
+    """
+    a numerical search for the minimal cell.
+    """
 
     tol = 0.001
     # norm1 = norm(indices, axis=1)
@@ -452,6 +458,9 @@ def print_list_GB_Planes(uvw, basis, m, n, lim=3):
 #  DSC and CSL lattices for bcc and fcc were made from the Sc lattice
 # via body_centering and face_centering:
 def odd_even(M1):
+    """
+    finds odd and even elements of a matrix.
+    """
     d_e = np.array([['a', 'a', 'a'],
                     ['a', 'a', 'a'],
                     ['a', 'a', 'a']], dtype=str)
@@ -504,6 +513,9 @@ def tertiary_test_b(a):
 
 
 def body_centering(b):
+    """
+    converting a single crystal minimal cell to a bcc one.
+    """
     z_b = np.eye(3, 3)
     while det(z_b) != 0.5:
         if det(self_test_b(b)) == 0.5:
@@ -519,6 +531,9 @@ def body_centering(b):
 
 
 def face_centering(a):
+    """
+    converting a single crystal minimal cell to an fcc one.
+    """
     z_f = np.eye(3, 3)
     M = a.copy()
     count = 0
@@ -547,7 +562,8 @@ def face_centering(a):
 
 def DSC_vec(basis, sigma, minicell):
     """
-    a DSC network for the given sigma and minimal cell.
+    a discrete shift complete (DSC)
+    network for the given sigma and minimal cell.
     """
     D_sc = np.round(sigma * (inv(minicell).T), 6).astype(int)
     if basis == 'sc':
@@ -560,7 +576,7 @@ def DSC_vec(basis, sigma, minicell):
 
 def CSL_vec(basis, minicell):
     """
-    your CSL cell for sc, fcc and bcc.
+    CSL minimal cell for sc, fcc and bcc.
     """
     C_sc = minicell.copy()
     if basis == 'sc':
@@ -573,7 +589,7 @@ def CSL_vec(basis, minicell):
 
 def DSC_on_plane(D, Pnormal):
     """
-    projects the given DSC network on the given plane.
+    projects the given DSC network on a given plane.
     """
     D_proj = np.zeros((3, 3))
     Pnormal = np.array(Pnormal)
@@ -585,7 +601,7 @@ def DSC_on_plane(D, Pnormal):
 
 def CSL_density(basis, minicell, plane):
     """
-     returns the CSL density of the given plane and its d_spacing.
+    returns the CSL density of a given plane and its d_spacing.
     """
     plane = np.array(plane)
     C = CSL_vec(basis, minicell)
@@ -617,6 +633,10 @@ def Ortho_fcc_bcc(basis, O1, O2):
 
 # Writing to a yaml file that will be read by gb_generator
 def Write_to_io(axis, m, n, basis):
+    """
+    an input file for gb_generator.py that can be customized.
+    It also contains the output from the usage of csl_generator.py.
+    """
 
     my_dict = {'GB_plane': str([axis[0], axis[1], axis[2]]), 'lattice_parameter': '4',
                'overlap_distance': '0.3', 'which_g': 'g1',
