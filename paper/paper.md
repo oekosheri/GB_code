@@ -31,15 +31,14 @@ of materials and are therefore an essential focus of materials science and physi
 
 
 To simulate grain boundary properties using atomistic codes such as ``LAMMPS``[@LAMMPS], 
-the atomic structure of the GBs need to be generated first. These geometrical entities have a 
-large parameter space that has been well formulated within a coincident site lattice (CSL) 
-mathematical framework. ``GB_code`` uses the CSL construction to generate GBs (currently for 
-cubic materials) systematically and provides input atomic structures for atomistic calculations. 
-In addition to this final goal, the ``csl_generator.py`` script and the attached Jupyter notebooks
-have extra functionality to show how the CSL properties can be used to locate, classify and categorize 
+the atomic structure of the GBs need to be generated first. 
+GBs are geometrical entities with a large parameter space that has been well formulated within a coincident site 
+lattice (CSL) mathematical framework. ``GB_code`` uses the CSL construction to generate GB atomic structures
+(currently for cubic materials) systematically and provides input atomic structures for atomistic calculations
+(e.g. ``LAMMPS``[@LAMMPS]). In addition to this final goal, the ``csl_generator.py`` script and the attached Jupyter 
+notebooks have extra functionality to show how the CSL properties can be used to locate, classify and categorize 
 different GBs and to extract detailed information about them; which causes it to be a good interactive 
 toolbox to learn about grain boundaries and versatile for running high-throughput calculations. 
-
 
 ``GB_code`` is mainly designed to be run in Linux terminal as it is documented in detail in the README 
 file of the repository but it can also be accessed via the attached Jupyter notebooks. The code consists 
@@ -50,7 +49,6 @@ usage of the code with some extra tips and functions to locate GBs of interest, 
 properties such as the overlapping patterns and displacement shift complete (DSC) vectors can be extracted 
 and visualized. Some examples of the usage of the ``GB_code`` in our previous publications have been shown 
 as well.
-
 
 ``GB_code``uses the analytical and mathematical formulations of the following works 
 [@Sutton:1996, @Bollmann:1984, @Grimmer]. Some functionality from this code on CSL [@Marcin] has been used in a 
