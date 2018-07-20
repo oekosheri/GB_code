@@ -14,7 +14,6 @@ authors:
     orcid: 0000-0000-0000-0000
     affiliation: 1
   - name: J. Neugebauer
-    orcid: 0000-0000-0000-0000
     affiliation: 1
 affiliations:
  - name: Max-Planck-institut fuer Eisenforschung
