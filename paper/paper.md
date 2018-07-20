@@ -47,8 +47,8 @@ produce the final GB structures. The attached Jupyter notebooks, ``Usage_of_GB_c
 ``Dichromatic_pattern_CSL_.ipynb``, can access the two scripts as modules, the former addresses the general 
 usage of the code with some extra tips and functions to locate GBs of interest, the latter depicts how CSL 
 properties such as the overlapping patterns and displacement shift complete (DSC) vectors can be extracted 
-and visualized. Some examples of the usage of the ``GB_code`` in our previous publications have been shown 
-as well.
+and visualized. In the notebooks, two examples of the usage of the ``GB_code`` in our previous publications[@Pub1, @Pub2] have been 
+shown as well.
 
 ``GB_code``uses the analytical and mathematical formulations of the following works 
 [@Sutton:1996, @Bollmann:1984, @Grimmer]. Some functionality from this code on CSL [@Marcin] has been used in a 
