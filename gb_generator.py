@@ -289,7 +289,7 @@ class GB_character:
     def Translate(self, a, b):
 
         """
-        translates the GB on a mesh created by a, b integers and write to LAMMPS.
+        translates the GB on a mesh created by a, b integers and writes to LAMMPS.
         """
         tol = 0.001
         if (1 - cslgen.ang(self.gbplane, self.axis) < tol):
