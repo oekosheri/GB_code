@@ -4,7 +4,7 @@ If you want to run DFT calculations you can use [Ovito](https://ovito.org/index.
 
 # Overview
 There are two main scripts: [_csl_generator.py_](./csl_generator.py) and [_gb_generator.py_](./csl_generator.py) which you need to use in this order to produce the final grain boundary (GB) structure.  
-In this README I will explain the steps to use the code in the Linux Terminal and I have also attached two _jupyter notebooks_ ([Usage_of_GB_code.ipynb](./Usage_of_GB_code.ipynb), [Dichromatic_pattern_CSL_.ipynb](./Dichromatic_pattern_CSL_.ipynb)) which describe how the code be can be accessed and used in the notebooks by various examples. These notebooks have extra functionality. The former is for the general usage of the code with some tips to locate GBs of interest, the latter depicts how CSL construction can be used for different purposes.   
+In this README I will explain the steps to use the code in the Linux Terminal and I have also attached two _jupyter notebooks_ ([Usage_of_GB_code.ipynb](./Usage_of_GB_code.ipynb), [Dichromatic_pattern_CSL.ipynb](./Dichromatic_pattern_CSL.ipynb)) which describe how the code can be accessed and used in the notebooks by various examples. These notebooks have extra functionality. The former is for the general usage of the code with some tips to locate GBs of interest, the latter depicts how CSL construction can be used for different purposes.   
 You can use [this link](https://mybinder.org/v2/gh/oekosheri/GB_code/master) for an interactive Jupyter notebook environment provided by Binder. [![Binder](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/oekosheri/GB_code/master)   
 To use it locally, you would need python3 and numpy1.14 for the main scripts and additionally matplotlib and pandas to use the auxilliary Jupyter notebooks. For installation simply clone or download the code in your terminal.
 
@@ -18,7 +18,7 @@ shown to help pinpoint the boundary plane of interest.
 The first code [_csl_generator.py_](./csl_generator.py) runs in two modes: 
 
 _First mode:
-  "python CSLgenerator.py axis(u v w) [limit]" ----->  Where the u v w are the
+  "python CSLgenerator.py u v w [limit]" ----->  Where the u v w are the
   indices of the rotation axis such as 1 0 0, 1 1 1, 1 1 0 and so on. The limit
   is the maximum Sigma of interest.
   (the limit by default: 100)_
@@ -45,7 +45,7 @@ Once you pick one of these angles (sigma boundaries) you should use the second m
 
 "
 _Second mode:
- "python CSLgenerator.py axis(u v w) basis sigma [limit]" -----> Where basis is
+ "python CSLgenerator.py u v w basis sigma [limit]" -----> Where basis is
   either fcc, bcc, diamond or sc. You read the sigma of interest from the first
   mode run. The limit here refers to CSL GB inclinations. The bigger the limit,
   the higher the indices of CSL planes.
@@ -130,7 +130,7 @@ For the twist grain boundary the smallest unit that needs to be scanned is the u
 - a: 10
 - b: 5
 
-You can choose a combination of atom remmoval and rigid body translation for finding the minimum energy GB. 
+You can choose a combination of atom removal and rigid body translation for finding the minimum energy GB. 
  
 - dimensions: Finally the supercell dimensions according to the io_file. Make sure you always choose a large enough l1 dimension that the GB and its periodic image do not interact.
 
