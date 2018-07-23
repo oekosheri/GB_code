@@ -32,7 +32,7 @@ GBs are geometrical entities with a large parameter space that has been well for
 In addition to providing the input structures, the ``csl_generator.py`` script and the attached Jupyter notebooks have extra functionality to show how the CSL properties can be used to locate, classify and categorize different GBs and to extract detailed information about them; which causes it to be a good interactive toolbox to learn about grain boundaries and versatile for running high-throughput calculations. The target audience are students/scientists of materials science and physics at any level of familiraity with the topic of GBs. 
 
 ``GB_code`` is mainly designed to be run in Linux terminal as it is documented in detail in the README file of the repository
-but it can also be accessed via the attached Jupyter notebooks. The code consists of two main scripts, ``csl_generator.py`` and ``gb_generator.py``, that should be used in this order to produce the final GB structures. The attached Jupyter notebooks, ``Usage_of_GB_code.ipynb`` and ``Dichromatic_pattern_CSL_.ipynb``, can access the two scripts as modules, the former addresses the
+but it can also be accessed via the attached Jupyter notebooks. The code consists of two main scripts, ``csl_generator.py`` and ``gb_generator.py``, that should be used in this order to produce the final GB structures. The attached Jupyter notebooks, ``Usage_of_GB_code.ipynb`` and ``Dichromatic_pattern_CSL.ipynb``, can access the two scripts as modules, the former addresses the
 general usage of the code with some extra tips and functions to locate GBs of interest, the latter depicts how CSL properties such 
 as the overlapping patterns and displacement shift complete (DSC) vectors can be extracted and visualized. In the notebooks, two examples of the usage of the ``GB_code`` in our previous publications[@Pub1, @Pub2] have been 
 shown as well.
@@ -44,7 +44,7 @@ attention to GB plane orientation which is often lacking in other grain bundary 
 
 # Acknowledgements
 
-R. Hadian would like to thank professor Mike Finnis for fruitful discussions.
+R. Hadian would like to thank professor Mike Finnis for fruitful discussions. Funding from the European Union’s Horizon 2020 research and innovation programme (Grant agreement No. 639211) is also gratefully acknowledged.
 
 
 # References
