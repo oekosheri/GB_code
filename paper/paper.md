@@ -5,8 +5,8 @@ tags:
   - grain boundary
   - crystallography
   - CSL
-  - atomistic simulations
-authors:
+  - atomistic simulations: VASP, LAMMPS
+ authors:
   - name: R. Hadian
     orcid: 0000-0002-9616-4602
     affiliation: 1
@@ -27,7 +27,7 @@ bibliography: paper.bib
 Grain boundaries (GBs) are crystalline borders between single crystals in materials microstructure. They play an important 
 role in mechanical, chemical or electronic response of materials and are therefore essential to materials science and physics.
 
-GBs are geometrical entities with a large parameter space that has been well formulated within a coincident site lattice (CSL) mathematical framework [@Sutton:1996]. One important computational advantage of the CSL formalism is that it enables the construction of GBs in a periodic setup for atomistic simulations. ``GB_code`` [@GB_code] uses the CSL construction to generate GB atomic structures (currently for cubic materials) systematically and provides input atomic structures for atomistic calculations (e.g. ``LAMMPS``[@LAMMPS]). These atomistic codes can further calculate different properties of the GBs.  
+GBs are geometrical entities with a large parameter space that has been well formulated within a coincident site lattice (CSL) mathematical framework [@Sutton:1996]. One important computational advantage of the CSL formalism is that it enables the construction of GBs in a periodic setup for atomistic simulations. ``GB_code`` [@GB_code] uses the CSL construction to generate GB atomic structures (currently for cubic materials) systematically. It provides input atomic structures for large-scale atomistic simulations with interatomic potentials (as implemented e.g. in ``LAMMPS``[@LAMMPS]) or _ab initio_, density-functional-theory (DFT) simulations (as implemented e.g. in VASP [@VASP]). These atomistic codes can further calculate different properties of the GBs.  
 In addition to providing the input structures, the ``csl_generator.py`` script and the attached Jupyter notebooks have extra functionality to show how the CSL properties can be used to locate, classify and categorize different GBs and to extract detailed information about them; which causes it to be a good interactive toolbox to learn about grain boundaries and versatile for running high-throughput calculations. The target audience are students/scientists of materials science and physics at any level of familiarity with the topic. 
 
 ``GB_code`` is mainly designed to be run in Linux terminal as it is documented in detail in the README file of the repository
