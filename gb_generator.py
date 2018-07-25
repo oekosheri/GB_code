@@ -47,6 +47,7 @@ class GB_character:
         self.overD = 0
         self.whichG = 'g1'
         self.trans = False
+        self.File = 'LAMMPS'
 
     def ParseGB(self, axis, basis, LatP, m, n, gb):
         """
@@ -82,26 +83,40 @@ class GB_character:
             print("Sorry! For now only works for cubic lattices ... ")
             sys.exit()
 
+<<<<<<< HEAD
     def WriteGB(self, *args):
         """
         parses the arguments and writes the final structure to the file.
         """
         self.overD = float(args[0])
+=======
+    def WriteGB(self, overlap=0.0, rigid=False,
+                dim1=1, dim2=1, dim3=1, file='LAMMPS',
+                **kwargs):
+        """
+        parses the arguments and writes the final structure to the file.
+        Possible keys:
+            (whichG, a, b)
+        """
+        self.overD = float(overlap)
+        self.trans = rigid
+        self.dim = np.array([int(dim1), int(dim2), int(dim3)])
+        self.File = file
+>>>>>>> development
         if self.overD > 0:
-            self.whichG = str(args[1])
-            self.trans = args[2]
+            try:
+                self.whichG = kwargs['whichG']
+            except:
+                print('decide on whichG!')
+                sys.exit()
             if self.trans:
-                if len(args) != 8:
-                    print('Make sure the input arguments are right!')
+                try:
+                    a = int(kwargs['a'])
+                    b = int(kwargs['b'])
+                except:
+                    print('Make sure the a and b integers are there!')
                     sys.exit()
-                a = int(args[3])
-                b = int(args[4])
-                self.dim = np.array([int(args[5]), int(args[6]), int(args[7])])
-            else:
-                if len(args) != 6:
-                    print('Make sure the input arguments are right!')
-                    sys.exit()
-                self.dim = np.array([int(args[3]), int(args[4]), int(args[5])])
+
             xdel, ydel, x_indice, y_indice = self.Find_overlapping_Atoms()
             print ("<<------ {} atoms are being removed! ------>>"
                     .format(len(xdel)))
@@ -119,37 +134,48 @@ class GB_character:
             else:
                 print("You must choose either 'g1', 'g2' ")
                 sys.exit()
-
             self.Expand_Super_cell()
-
             if not self.trans:
                 count = 0
                 print ("<<------ 1 GB structure is being created! ------>>")
-                self.Write_to_Lammps(count)
+                if self.File == "LAMMPS":
+                    self.Write_to_Lammps(count)
+                elif self.File == "VASP":
+                    self.Write_to_Vasp(count)
+                else:
+                    print("The output file must be either LAMMPS or VASP!")
             elif self.trans:
                 self.Translate(a, b)
 
         elif self.overD == 0:
-            self.trans = args[1]
             if self.trans:
-                if len(args) != 7:
-                    print('Make sure the input arguments are right!')
+                try:
+                    a = int(kwargs['a'])
+                    b = int(kwargs['b'])
+                except:
+                    print('Make sure the a and b integers are there!')
                     sys.exit()
                 print ("<<------ 0 atoms are being removed! ------>>")
-                a = int(args[2])
-                b = int(args[3])
-                self.dim = np.array([int(args[4]), int(args[5]), int(args[6])])
                 self.Expand_Super_cell()
                 self.Translate(a, b)
+
             else:
+<<<<<<< HEAD
                 if len(args) != 5:
                     print('Make sure the input arguments are right!')
                     sys.exit()
                 self.dim = np.array([int(args[2]), int(args[3]), int(args[4])])
+=======
+>>>>>>> development
                 self.Expand_Super_cell()
                 count = 0
                 print ("<<------ 1 GB structure is being created! ------>>")
-                self.Write_to_Lammps(count)
+                if self.File == "LAMMPS":
+                    self.Write_to_Lammps(count)
+                elif self.File == "VASP":
+                    self.Write_to_Vasp(count)
+                else:
+                    print("The output file must be either LAMMPS or VASP!")
         else:
             print('Overlap distance is not inputted incorrectly!')
             sys.exit()
@@ -286,10 +312,15 @@ class GB_character:
         Y_del = Y_new[indice_y]
         return (X_del, Y_del, IndX[indice_x], IndY[indice_y])
 
-    def Translate(self, a, b):
+    def Translate(self, a, b ):
 
         """
+<<<<<<< HEAD
         translates the GB on a mesh created by a, b integers and writes to LAMMPS.
+=======
+        translates the GB on a mesh created by a, b integers and writes
+        to LAMMPS or VASP.
+>>>>>>> development
         """
         tol = 0.001
         if (1 - cslgen.ang(self.gbplane, self.axis) < tol):
@@ -321,14 +352,71 @@ class GB_character:
 
         XX = self.atoms1
         count = 0
-        for i in range(a):
-            for j in range(b):
-                count += 1
-                shift = i * shift1 + j * shift2
-                atoms1_new = XX.copy() + shift
-                self.atoms1 = atoms1_new
-                self.Write_to_Lammps(count)
+        if self.File == 'LAMMPS':
 
+            for i in range(a):
+                for j in range(b):
+                    count += 1
+                    shift = i * shift1 + j * shift2
+                    atoms1_new = XX.copy() + shift
+                    self.atoms1 = atoms1_new
+                    self.Write_to_Lammps(count)
+        elif self.File == 'VASP':
+
+            for i in range(a):
+                for j in range(b):
+                    count += 1
+                    shift = i * shift1 + j * shift2
+                    atoms1_new = XX.copy() + shift
+                    self.atoms1 = atoms1_new
+                    self.Write_to_Vasp(count)
+        else:
+            print("The output file must be either LAMMPS or VASP!")
+
+<<<<<<< HEAD
+=======
+    def Write_to_Vasp(self, trans):
+        """
+        write a single GB without translations to POSCAR.
+        """
+        name = 'POS_G'
+        plane = str(self.gbplane[0])+str(self.gbplane[1])+str(self.gbplane[2])
+        if self.overD > 0:
+            overD = str(self.overD)
+        else:
+            overD = str(None)
+        Trans = str(trans)
+        # tol = 0.001
+        X = self.atoms1.copy()
+        Y = self.atoms2.copy()
+        X_new = X * self.LatP
+        Y_new = Y * self.LatP
+        dimx, dimy, dimz = self.dim
+
+        xlo = -1 * np.round(norm(self.ortho1[:, 0]) * dimx * self.LatP, 8)
+        xhi = np.round(norm(self.ortho1[:, 0]) * dimx * self.LatP, 8)
+        LenX= xhi - xlo
+        ylo = 0.0
+        yhi = np.round(norm(self.ortho1[:, 1]) * dimy * self.LatP, 8)
+        LenY= yhi - ylo
+        zlo = 0.0
+        zhi = np.round(norm(self.ortho1[:, 2]) * dimz * self.LatP, 8)
+        LenZ = zhi - zlo
+
+        Wf = np.concatenate((X_new, Y_new))
+
+        with open(name + plane + '_' + overD + '_' +Trans, 'w') as f:
+            f.write('#POSCAR written by GB_code \n')
+            f.write('1 \n')
+            f.write('{0:.8f} 0.0 0.0 \n'.format(LenX))
+            f.write('0.0 {0:.8f} 0.0 \n'.format(LenY))
+            f.write('0.0 0.0 {0:.8f} \n'.format(LenZ))
+            f.write('{} {} \n'.format(len(X),len(Y)))
+            f.write('Cartesian\n')
+            np.savetxt(f, Wf, fmt='%.8f %.8f %.8f')
+        f.close()
+
+>>>>>>> development
     def Write_to_Lammps(self, trans):
         """
         write a single GB without translations to LAMMPS.
@@ -403,6 +491,7 @@ def main():
             a = in_params['a']
             b = in_params['b']
             dim1, dim2, dim3 = in_params['dimensions']
+            file = in_params['File_type']
 
         except:
             print('Make sure the input argumnets in io_file are'
@@ -416,17 +505,26 @@ def main():
         gbI.CSL_Bicrystal_Atom_generator()
 
         if overlap > 0 and rigid:
-            gbI.WriteGB(overlap, whichG, rigid, a, b, dim1, dim2, dim3)
-
+            gbI.WriteGB(
+                overlap = overlap, whichG = whichG, rigid = rigid, a = a,
+                b = b, dim1 = dim1, dim2 = dim2, dim3 = dim3, file = file
+                )
         elif overlap > 0 and not rigid:
-            gbI.WriteGB(overlap, whichG, rigid, dim1, dim2, dim3)
-
+            gbI.WriteGB(
+                overlap = overlap, whichG = whichG, rigid = rigid,
+                dim1 = dim1, dim2 = dim2, dim3 = dim3, file = file
+                )
         elif overlap == 0 and rigid:
-            gbI.WriteGB(overlap, rigid, a, b, dim1, dim2, dim3)
-
+            gbI.WriteGB(
+                overlap = overlap, rigid = rigid, a = a,
+                b = b, dim1 = dim1, dim2 = dim2, dim3 = dim3,
+                file = file
+                )
         elif overlap == 0 and not rigid:
-            gbI.WriteGB(overlap, rigid, dim1, dim2, dim3)
-
+            gbI.WriteGB(
+                overlap = overlap, rigid = rigid,
+                dim1 = dim1, dim2 = dim2, dim3 = dim3, file = file
+                )
     else:
         print(__doc__)
     return
