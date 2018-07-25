@@ -83,13 +83,6 @@ class GB_character:
             print("Sorry! For now only works for cubic lattices ... ")
             sys.exit()
 
-<<<<<<< HEAD
-    def WriteGB(self, *args):
-        """
-        parses the arguments and writes the final structure to the file.
-        """
-        self.overD = float(args[0])
-=======
     def WriteGB(self, overlap=0.0, rigid=False,
                 dim1=1, dim2=1, dim3=1, file='LAMMPS',
                 **kwargs):
@@ -102,7 +95,6 @@ class GB_character:
         self.trans = rigid
         self.dim = np.array([int(dim1), int(dim2), int(dim3)])
         self.File = file
->>>>>>> development
         if self.overD > 0:
             try:
                 self.whichG = kwargs['whichG']
@@ -160,13 +152,6 @@ class GB_character:
                 self.Translate(a, b)
 
             else:
-<<<<<<< HEAD
-                if len(args) != 5:
-                    print('Make sure the input arguments are right!')
-                    sys.exit()
-                self.dim = np.array([int(args[2]), int(args[3]), int(args[4])])
-=======
->>>>>>> development
                 self.Expand_Super_cell()
                 count = 0
                 print ("<<------ 1 GB structure is being created! ------>>")
@@ -315,12 +300,8 @@ class GB_character:
     def Translate(self, a, b ):
 
         """
-<<<<<<< HEAD
-        translates the GB on a mesh created by a, b integers and writes to LAMMPS.
-=======
         translates the GB on a mesh created by a, b integers and writes
         to LAMMPS or VASP.
->>>>>>> development
         """
         tol = 0.001
         if (1 - cslgen.ang(self.gbplane, self.axis) < tol):
@@ -373,8 +354,6 @@ class GB_character:
         else:
             print("The output file must be either LAMMPS or VASP!")
 
-<<<<<<< HEAD
-=======
     def Write_to_Vasp(self, trans):
         """
         write a single GB without translations to POSCAR.
@@ -416,7 +395,6 @@ class GB_character:
             np.savetxt(f, Wf, fmt='%.8f %.8f %.8f')
         f.close()
 
->>>>>>> development
     def Write_to_Lammps(self, trans):
         """
         write a single GB without translations to LAMMPS.

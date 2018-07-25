@@ -5,21 +5,13 @@ This module is a collection of functions that produce CSL properties.
 When run from the terminal, the code runs in two modes.
 
  First mode:
-<<<<<<< HEAD
-  'python CSLgenerator.py axis(u v w) [limit]' ----->  Where the u v w are the
-=======
   'python CSLgenerator.py u v w [limit]' ----->  Where the u v w are the
->>>>>>> development
   indices of the rotation axis such as 1 0 0, 1 1 1, 1 1 0 and so on. The limit
   is the maximum Sigma of interest.
   (the limit by default: 100)
 
  Second mode:
-<<<<<<< HEAD
- 'python CSLgenerator.py axis(u v w) basis sigma [limit]' -----> Where basis is
-=======
  'python CSLgenerator.py u v w basis sigma [limit]' -----> Where basis is
->>>>>>> development
   either fcc, bcc, diamond or sc. You read the sigma of interest from the first
   mode run. The limit here refers to CSL GB inclinations. The bigger the limit,
   the higher the indices of CSL planes.
@@ -134,11 +126,7 @@ def ang(a, b):
 
 def CommonDivisor(a):
     """
-<<<<<<< HEAD
-    returns the reduced vector and the common factor of vector a.
-=======
     returns the common factor of vector a and the reduced vector.
->>>>>>> development
     """
     CommFac = []
     a = np.array(a)
@@ -212,13 +200,8 @@ def Tilt_Twist_comp(v1, uvw, m, n):
         twist = 2 * acos(cos(theta / 2) / cos(radians(tilt / 2)))
         print("Tilt component: {0:<6.2f} Twist component: {1:6.2f}"
                      .format(tilt, twist))
-<<<<<<< HEAD
 
 
-=======
-
-
->>>>>>> development
 def Create_Possible_GB_Plane_List(uvw, m=5, n=1, lim=5):
     """
     generate GB planes and specifies the character.
@@ -666,13 +649,8 @@ def Write_to_io(axis, m, n, basis):
         f.write('# CSL plane of interest that you read from the output of '
                 'csl_generator as GB1 \n')
         f.write(list(my_dict.keys())[0] + ': ' + list(my_dict.values())[0] +
-<<<<<<< HEAD
-                '\n')
-        f.write('# lattice parameter in Angstrom \n \n')
-=======
                 '\n\n')
         f.write('# lattice parameter in Angstrom \n')
->>>>>>> development
         f.write(list(my_dict.keys())[1] + ': ' + list(my_dict.values())[1] +
                 '\n\n')
         f.write('# atoms that are closer than this fraction of the lattice '
