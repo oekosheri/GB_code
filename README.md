@@ -1,11 +1,11 @@
 # GB_code
-This python package helps you create orthogonal grain boundary supercells for atomistic calculations. The code is based on the coincident site lattice (CSL) formulations for cubic materials (sc, bcc, fcc, diamond). I intend to extend it to hcp structures soon. This code produces a final structure to be read in [LAMMPS](https://lammps.sandia.gov/) or [VASP](https://www.vasp.at/).
+This python package helps you create orthogonal grain boundary supercells for atomistic calculations. The code is based on the coincident site lattice (CSL) formulations for cubic materials (sc, bcc, fcc, diamond). I intend to extend it to hcp structures soon. The code produces a final structure to be read in [LAMMPS](https://lammps.sandia.gov/) or [VASP](https://www.vasp.at/).
 
 # Overview
 There are two main scripts: [_csl_generator.py_](./csl_generator.py) and [_gb_generator.py_](./csl_generator.py) which you need to use in this order to produce the final grain boundary (GB) structure.
 In this README I will explain the steps to use the code in the Linux Terminal and I have also attached two _jupyter notebooks_ ([Usage_of_GB_code.ipynb](./Usage_of_GB_code.ipynb), [Dichromatic_pattern_CSL.ipynb](./Dichromatic_pattern_CSL.ipynb)) which describe how the code can be accessed and used in the notebooks by various examples. These notebooks have extra functionality. The former is for the general usage of the code with some tips to locate GBs of interest, the latter depicts how CSL construction can be used for different purposes.
 You can use [this link](https://mybinder.org/v2/gh/oekosheri/GB_code/master) for an interactive Jupyter notebook environment provided by Binder. [![Binder](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/oekosheri/GB_code/master)
-To use it locally, you need python3 and numpy1.14 for the main scripts and additionally matplotlib and pandas to use the auxilliary Jupyter notebooks. For installation simply clone or download the code in your terminal.
+To use it locally, you will need python3 and numpy1.14 for the main scripts and additionally matplotlib and pandas to use the auxilliary Jupyter notebooks. For installation simply clone or download the code in your terminal.
 
 # Usage
 To pick a grain boundary 5 degrees of freedom need to be fixed: rotation axis, rotation angle and GB plane orientation.
@@ -27,7 +27,7 @@ _First mode:
 ```
 > python csl_generator.py 1 1 1 50
 
-  List of possible CSLs for [1 1 1] axis sorted by Sigma
+   List of possible CSLs for [1 1 1] axis sorted by Sigma
 Sigma:     1  Theta:   0.00
 Sigma:     3  Theta:  60.00
 Sigma:     7  Theta:  38.21
@@ -39,10 +39,11 @@ Sigma:    37  Theta:  50.57
 Sigma:    39  Theta:  32.20
 Sigma:    43  Theta:  15.18
 Sigma:    49  Theta:  43.57
+
+ Choose a basis, pick a sigma and use the second mode!
 ```
 Once you pick one of these angles (sigma boundaries) you should use the second mode, decide on a basis, for ex: diamond, and list the GB planes of interest:
 
-"
 _Second mode:
  "python CSLgenerator.py u v w basis sigma [limit]" -----> Where basis is
   either fcc, bcc, diamond or sc. You read the sigma of interest from the first
@@ -75,33 +76,37 @@ You must customize the io_file and then run the gb_generator.py code after to ge
 how the io_file looks like right now:
 
 ```
-### input parameters for gb_generator.py ###
+## input parameters for gb_generator.py ###
 # CSL plane of interest that you read from the output of csl_generator as GB1
-GB_plane: [1,1,1]
-# lattice parameter in Angstrom
+GB_plane: [1, 1, 1]
 
+# lattice parameter in Angstrom
 lattice_parameter: 4
+
 # atoms that are closer than this fraction of the lattice parameter will be removed
 # either from grain1 (g1) or from grain2 (g2). If you choose 0 no atoms will be removed
+overlap_distance: 0.0
 
-overlap_distance: 0.3
 # decide which grain the atoms should be removed from
-
 which_g: g1
+
 # decide whether you want rigid body translations to be done on the GB_plane or not (yes or no)
 # When yes, for any GB aside from twist GBs, the two inplane
-# CSL vecs will be divided by integers a and b to produce a*b initial
+# CSL vectors will be divided by integers a and b to produce a*b initial
 # configurations. The default values produce 50 initial structures
 # if you choose no for rigid_trans, you do not need to care about a and b.
 # twist boundaries are handled internally
-
 rigid_trans: no
 a: 10
 b: 5
+
 # dimensions of the supercell in: [l1,l2,l3],  where l1 isthe direction along the GB_plane normal
 #  and l2 and l3 are inplane dimensions
-
 dimensions: [1,1,1]
+
+# File type, either VASP or LAMMPS input
+File_type: LAMMPS
+
 
 # The following is your csl_generator output. YOU DO NOT NEED TO CHANGE THEM!
 
@@ -109,7 +114,6 @@ axis: [1, 1, 1]
 m: 7
 n: 1
 basis: diamond
-
 ```
 - GB_plane: must be chosen from the list that was provided after running the second mode of csl_generator.py. Here for ex: [2,  1, -2].
 Change the default plane to your chosen one.
@@ -119,8 +123,8 @@ To minimize the grain boundary energy, microscopic degrees of freedom must be ta
 (1) atom removal by finding atoms that are too close to one another and (2) rigid body translations on the GB plane.
 (1) will be achieved by
 
-- overlap_distance: a fraction of lattice parameter. See the description in io_file.
-- which_g: g1 or g2
+- overlap_distance: a fraction of lattice parameter. See the description in io_file. By default 0.3.
+- which_g: g1 or g2, by default g1.
 
 (2) will be achieved by
 
@@ -131,7 +135,9 @@ For the twist grain boundary the smallest unit that needs to be scanned is the u
 
 You can choose a combination of atom removal and rigid body translation for finding the minimum energy GB.
 
-- dimensions: Finally the supercell dimensions according to the io_file. Make sure you always choose a large enough l1 dimension that the GB and its periodic image do not interact.
+- dimensions: The supercell dimensions according to the io_file. Make sure you always choose a large enough l1 dimension that the GB and its periodic image do not interact. By default [1,1,1].
+
+- File_type: choose either LAMMPS or VASP. By default LAMMPS.
 
 As an example, we change the default gb_plane to [2,  1, -2] and rigid_trans to 'yes' in the io_file.
 To produce the GB of interest we go on with: [_gb_generator.py_](./gb_generator.py)
@@ -153,7 +159,7 @@ In the end you must find a crossover between the accuracy you need and the compu
 input structures.
 If you are a more rigorous user, you can just create the GB structure with no atom removal or rigid body translations and run a more involved minimum energy search routine.
 
-- _**A note on the minimization procedure:**_
+- _**A note on the minimization procedure in LAMMPS:**_
 
 I often do a three stage minimization at 0K followed by an MD annealing simulation in [LAMMPS](https://lammps.sandia.gov/).
 The 0K miminimization is composed of: A conjugate gradient minimization of the energy of atoms, the simulation box and then atoms again;
