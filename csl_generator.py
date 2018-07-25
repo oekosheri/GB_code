@@ -5,13 +5,13 @@ This module is a collection of functions that produce CSL properties.
 When run from the terminal, the code runs in two modes.
 
  First mode:
-  'python CSLgenerator.py axis(u v w) [limit]' ----->  Where the u v w are the
+  'python CSLgenerator.py u v w [limit]' ----->  Where the u v w are the
   indices of the rotation axis such as 1 0 0, 1 1 1, 1 1 0 and so on. The limit
   is the maximum Sigma of interest.
   (the limit by default: 100)
 
  Second mode:
- 'python CSLgenerator.py axis(u v w) basis sigma [limit]' -----> Where basis is
+ 'python CSLgenerator.py u v w basis sigma [limit]' -----> Where basis is
   either fcc, bcc, diamond or sc. You read the sigma of interest from the first
   mode run. The limit here refers to CSL GB inclinations. The bigger the limit,
   the higher the indices of CSL planes.
@@ -126,7 +126,7 @@ def ang(a, b):
 
 def CommonDivisor(a):
     """
-    returns the reduced vector and the common factor of vector a.
+    returns the common factor of vector a and the reduced vector.
     """
     CommFac = []
     a = np.array(a)
@@ -639,28 +639,29 @@ def Write_to_io(axis, m, n, basis):
     """
 
     my_dict = {'GB_plane': str([axis[0], axis[1], axis[2]]), 'lattice_parameter': '4',
-               'overlap_distance': '0.3', 'which_g': 'g1',
+               'overlap_distance': '0.0', 'which_g': 'g1',
                'rigid_trans': 'no', 'a': '10', 'b': '5',
-               'dimensions': '[1,1,1]'}
+               'dimensions': '[1,1,1]',
+               'File_type': 'LAMMPS'}
 
     with open('io_file', 'w') as f:
         f.write('### input parameters for gb_generator.py ### \n')
         f.write('# CSL plane of interest that you read from the output of '
-                'csl_generator as GB1 \n \n')
+                'csl_generator as GB1 \n')
         f.write(list(my_dict.keys())[0] + ': ' + list(my_dict.values())[0] +
-                '\n')
-        f.write('# lattice parameter in Angstrom \n \n')
+                '\n\n')
+        f.write('# lattice parameter in Angstrom \n')
         f.write(list(my_dict.keys())[1] + ': ' + list(my_dict.values())[1] +
-                '\n')
+                '\n\n')
         f.write('# atoms that are closer than this fraction of the lattice '
                 'parameter will be removed \n')
         f.write('# either from grain1 (g1) or from grain2 (g2). If you choose '
-                '0 no atoms will be removed \n\n')
+                '0 no atoms will be removed \n')
         f.write(list(my_dict.keys())[2] + ': ' + list(my_dict.values())[2] +
-                '\n')
-        f.write('# decide which grain the atoms should be removed from \n\n')
+                '\n\n')
+        f.write('# decide which grain the atoms should be removed from \n')
         f.write(list(my_dict.keys())[3]+': ' + str(list(my_dict.values())[3]) +
-                '\n')
+                '\n\n')
         f.write('# decide whether you want rigid body translations to be done '
                 'on the GB_plane or not (yes or no)\n')
 
@@ -668,7 +669,7 @@ def Write_to_io(axis, m, n, basis):
         '# CSL vectors will be divided by integers a and b to produce a*b initial \n'
         '# configurations. The default values produce 50 initial structures \n'
         '# if you choose no for rigid_trans, you do not need to care about a and b. \n'
-        '# twist boundaries are handled internally \n\n')
+        '# twist boundaries are handled internally \n')
 
         f.write(list(my_dict.keys())[4] + ': ' +
                 str(list(my_dict.values())[4]) + '\n')
@@ -677,12 +678,15 @@ def Write_to_io(axis, m, n, basis):
                 str(list(my_dict.values())[5]) + '\n')
 
         f.write(list(my_dict.keys())[6] + ': ' +
-                str(list(my_dict.values())[6]) + '\n')
+                str(list(my_dict.values())[6]) + '\n\n')
 
         f.write('# dimensions of the supercell in: [l1,l2,l3],  where l1 is'
                 'the direction along the GB_plane normal\n')
-        f.write('#  and l2 and l3 are inplane dimensions\n\n')
+        f.write('#  and l2 and l3 are inplane dimensions \n')
         f.write(list(my_dict.keys())[7] + ': ' + list(my_dict.values())[7] +
+                '\n\n')
+        f.write('# File type, either VASP or LAMMPS input \n')
+        f.write(list(my_dict.keys())[8] + ': ' + list(my_dict.values())[8] +
                 '\n\n\n')
         f.write('# The following is your csl_generator output. YOU DO NOT NEED '
                 'TO CHANGE THEM! \n\n')
@@ -702,12 +706,15 @@ def main():
         print(__doc__)
     else:
         uvw = np.array([int(sys.argv[1]), int(sys.argv[2]), int(sys.argv[3])])
+        uvw = CommonDivisor(uvw)[0]
+
 
     if len(sys.argv) == 4:
         limit = 100
-        print("    List of possible CSLs for {} axis sorted by Sigma   "
+        print("   List of possible CSLs for {} axis sorted by Sigma   "
               .format(str(uvw)))
         print_list(uvw, limit)
+        print("\n Choose a basis, pick a sigma and use the second mode!\n")
 
     if len(sys.argv) == 5:
 
@@ -716,6 +723,7 @@ def main():
             print("    List of possible CSLs for {} axis sorted by Sigma   "
                   .format(str(uvw)))
             print_list(uvw, limit)
+            print("\n Choose a basis, pick a sigma and use the second mode!\n")
 
         except:
             print("""
@@ -737,6 +745,10 @@ def main():
             print(" GB1-------------------GB2-------------------Type----------"
                   "Number of Atoms ")
             print_list_GB_Planes(uvw, basis, m, n, lim)
+            print(" \nPick a GB plane and customize the io_file! ")
+            print(" then run : python gb_generator.py io_file\n ")
+
+
 
         except:
             print("Your input sigma is wrong!")
@@ -763,6 +775,8 @@ def main():
                   "Number of Atoms ")
 
             print_list_GB_Planes(uvw, basis, m, n, lim)
+            print(" \nPick a GB plane and customize the io_file! ")
+            print(" then run : python gb_generator.py io_file\n ")
 
         except:
             print("Your input sigma is wrong!")
