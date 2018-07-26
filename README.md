@@ -123,8 +123,8 @@ To minimize the grain boundary energy, microscopic degrees of freedom must be ta
 (1) atom removal by finding atoms that are too close to one another and (2) rigid body translations on the GB plane.
 (1) will be achieved by
 
-- overlap_distance: a fraction of lattice parameter. See the description in io_file. By default 0.3.
-- which_g: g1 or g2, by default g1.
+- overlap_distance: a fraction of lattice parameter. See the description in io_file. By default 0.0.
+- which_g: g1 or g2.
 
 (2) will be achieved by
 
@@ -139,7 +139,7 @@ You can choose a combination of atom removal and rigid body translation for find
 
 - File_type: choose either LAMMPS or VASP. By default LAMMPS.
 
-As an example, we change the default gb_plane to [2,  1, -2] and rigid_trans to 'yes' in the io_file.
+As an example, we change the default gb_plane to [2,  1, -2], overlap_distance to 0.3 and rigid_trans to 'yes' in the io_file.
 To produce the GB of interest we go on with: [_gb_generator.py_](./gb_generator.py)
 ```
 > python gb_generator.py io_file
@@ -168,7 +168,7 @@ For the annealing simulations I use an _nvt_ ensemble followed by damped dynamic
 # Questions
 
 If you have any questions, raise an issue or contact [me](mailto:shahrzadhadian@gmail.com).
-Feel free to use the code anyway you like, if you find it useful please cite this page or the attached paper.
+Feel free to use the code anyway you like, if you find it useful please cite this page.
 
 # License
 [MIT](./LICENSE).
