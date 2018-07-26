@@ -6,7 +6,7 @@ tags:
   - crystallography
   - CSL
   - atomistic simulations (VASP, LAMMPS)
- authors:
+authors:
   - name: R. Hadian
     orcid: 0000-0002-9616-4602
     affiliation: 1
