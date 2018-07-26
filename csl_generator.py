@@ -748,8 +748,6 @@ def main():
             print(" \nPick a GB plane and customize the io_file! ")
             print(" then run : python gb_generator.py io_file\n ")
 
-
-
         except:
             print("Your input sigma is wrong!")
             sys.exit()
