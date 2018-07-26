@@ -430,7 +430,6 @@ def Find_Orthogonal_cell(basis, uvw, m, n, GB1):
                     OrthoCell_2.astype(float), Num.astype(int)))
 
         elif basis == 'fcc' or basis == 'bcc':
-
             ortho1, ortho2 = Ortho_fcc_bcc(basis, OrthoCell_1, OrthoCell_2)
             Volume_1 = (round(det(ortho1), 5))
             Num = Volume_1 * len(Basis(basis)) * 2

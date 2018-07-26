@@ -18,6 +18,7 @@ import numpy as np
 from numpy import dot, cross
 from numpy.linalg import det, norm
 import csl_generator as cslgen
+import warnings
 
 
 class GB_character:
@@ -199,7 +200,8 @@ class GB_character:
         Base = cslgen.Basis(str(self.basis))
         Atoms = []
         tol = 0.001
-
+        if V > 5e6:
+            print("Warning! It may take a very long time to produce this cell!")
         # produce Atoms:
 
         for i in range(V):
@@ -297,7 +299,7 @@ class GB_character:
         Y_del = Y_new[indice_y]
         return (X_del, Y_del, IndX[indice_x], IndY[indice_y])
 
-    def Translate(self, a, b ):
+    def Translate(self, a, b):
 
         """
         translates the GB on a mesh created by a, b integers and writes
