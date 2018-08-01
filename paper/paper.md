@@ -1,5 +1,5 @@
 ---
-title: 'GB_code: A grain boundary generation code'
+title: 'GB\_code: A grain boundary generation code'
 tags:
   - Python
   - grain boundary
@@ -33,7 +33,7 @@ but it can also be accessed via the attached Jupyter notebooks. The code consist
 general usage of the code with some extra tips and functions to locate GBs of interest, the latter depicts how CSL properties such
 as the overlapping patterns and displacement shift complete (DSC) vectors can be extracted and visualized. In the notebooks, two examples of the usage of the ``GB_code`` in our previous publications[@Pub1, @Pub2] have been shown as well.
 
-``GB_code``uses the analytical and mathematical formulations of the following works [@Sutton:1996, @Bollmann:1982, @Grimmer]. Some functionality from this code [@Marcin] on CSL has been used in a modified form in the ``GB_code``. To our knowledge, in comparison to other GB generation codes in different scientific groups``GB_code``is faster due its extensive usage of python Numpy library and is more comprehensive. The user need only to select a rotation axis and then will be guided through in a step by step manner how to find and create the GB of interest. The code has been designed to be simple to use and instructive with a special attention to GB plane orientation which is often lacking in other grain bundary creation codes.
+``GB_code``uses the analytical and mathematical formulations of the following works [@Sutton:1996, @Bollmann:1982, @Grimmer]. Some functionality from this code [@Marcin] on CSL has been used in a modified form in the ``GB_code``. To our knowledge, in comparison to other GB generation codes in different scientific groups``GB_code``is faster due its extensive usage of python Numpy library and is more comprehensive. The user need only to select a rotation axis and then will be guided through in a step by step manner how to find and create the GB of interest. The code has been designed to be simple to use and instructive with a special attention to GB plane orientation which is often lacking in other grain boundary creation codes.
 
 # Acknowledgements
 
