@@ -2,10 +2,19 @@
 This python package helps you create orthogonal grain boundary supercells for atomistic calculations. The code is based on the coincident site lattice (CSL) formulations for cubic materials (sc, bcc, fcc, diamond). I intend to extend it to hcp structures soon. The code produces a final structure to be read in [LAMMPS](https://lammps.sandia.gov/) or [VASP](https://www.vasp.at/).
 
 # Overview
-There are two main scripts: [_csl_generator.py_](./csl_generator.py) and [_gb_generator.py_](./csl_generator.py) which you need to use in this order to produce the final grain boundary (GB) structure.
+There are two main scripts: [_csl_generator.py_](./csl_generator.py) and [_gb_generator.py_](./csl_generator.py) which you need to use in this order to produce the final grain boundary (GB) structure. These scripts are both modules (a collection of functions/classes) and can be executed
+from the command line.
+
 In this README I will explain the steps to use the code in the Linux Terminal and I have also attached two _jupyter notebooks_ ([Usage_of_GB_code.ipynb](./Usage_of_GB_code.ipynb), [Dichromatic_pattern_CSL.ipynb](./Dichromatic_pattern_CSL.ipynb)) which describe how the code can be accessed and used in the notebooks by various examples. These notebooks have extra functionality. The former is for the general usage of the code with some tips to locate GBs of interest, the latter depicts how CSL construction can be used for different purposes.
 You can use [this link](https://mybinder.org/v2/gh/oekosheri/GB_code/master) for an interactive Jupyter notebook environment provided by Binder. [![Binder](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/oekosheri/GB_code/master)
-To use it locally, you will need python3 and numpy1.14 for the main scripts and additionally matplotlib and pandas to use the auxilliary Jupyter notebooks. For installation simply clone or download the code in your terminal.
+To use it locally, you will need python3 and numpy1.14 for the main scripts and additionally matplotlib and pandas to use the auxilliary Jupyter notebooks.
+
+# Installation guide
+For installation simply clone or download the code in your terminal and in the main directory of the package type:
+```
+> pip install .
+```
+This will copy the modules to your active python site-packages, thereby making them importable in any python script and will put the scrpits in the python bin, thereby making them executable in the shell.
 
 # Usage
 To pick a grain boundary 5 degrees of freedom need to be fixed: rotation axis, rotation angle and GB plane orientation.
@@ -25,7 +34,7 @@ _First mode:
   _ex:_
 
 ```
-> python csl_generator.py 1 1 1 50
+> csl_generator.py 1 1 1 50
 
    List of possible CSLs for [1 1 1] axis sorted by Sigma
 Sigma:     1  Theta:   0.00
@@ -54,7 +63,7 @@ _Second mode:
   _ex:_
 
 ```
-> python csl_generator.py 1 1 1 diamond 13
+> csl_generator.py 1 1 1 diamond 13
 
 ----------List of possible CSL planes for Sigma 13---------
  GB1-------------------GB2-------------------Type----------Number of Atoms
@@ -142,7 +151,7 @@ You can choose a combination of atom removal and rigid body translation for find
 As an example, we change the default gb_plane to [2,  1, -2], overlap_distance to 0.3 and rigid_trans to 'yes' in the io_file.
 To produce the GB of interest we go on with: [_gb_generator.py_](./gb_generator.py)
 ```
-> python gb_generator.py io_file
+> gb_generator.py io_file
 <<------ 32 atoms are being removed! ------>>
 <<------ 50 GB structures are being created! ------>>
 ```
