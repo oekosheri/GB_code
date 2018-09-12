@@ -40,7 +40,7 @@ def get_cubic_sigma(uvw, m, n=1):
     sigma = m*m + n*n * sqsum
     while sigma != 0 and sigma % 2 == 0:
         sigma /= 2
-    return (sigma if sigma > 1 else None)
+    return sigma if sigma > 1 else None
 
 
 def get_cubic_theta(uvw, m, n=1):
@@ -94,11 +94,11 @@ def rot(a, Theta):
     a = a / norm(a)
     ax, ay, az = a
     return np.array([[c + ax * ax * (1 - c), ax * ay * (1 - c) - az * s,
-                   ax * az * (1 - c) + ay * s],
-                  [ay * ax * (1 - c) + az * s, c + ay * ay * (1 - c),
-                   ay * az * (1 - c) - ax * s],
-                  [az * ax * (1 - c) - ay * s, az * ay * (1 - c) + ax * s,
-                   c + az * az * (1 - c)]])
+        ax * az * (1 - c) + ay * s],
+        [ay * ax * (1 - c) + az * s, c + ay * ay * (1 - c),
+        ay * az * (1 - c) - ax * s],
+        [az * ax * (1 - c) - ay * s, az * ay * (1 - c) + ax * s,
+        c + az * az * (1 - c)]])
 
 
 # Helpful Functions:
@@ -183,7 +183,7 @@ def SymmEquivalent(arr):
         for j in range(len(arr)):
             Result.append(dot(Sym[i, :], arr[j]))
     Result = np.array(Result)
-    return (np.unique(Result, axis=0))
+    return np.unique(Result, axis=0)
 
 def Tilt_Twist_comp(v1, uvw, m, n):
     """
@@ -199,7 +199,7 @@ def Tilt_Twist_comp(v1, uvw, m, n):
     else:
         twist = 2 * acos(cos(theta / 2) / cos(radians(tilt / 2)))
         print("Tilt component: {0:<6.2f} Twist component: {1:6.2f}"
-                     .format(tilt, twist))
+            .format(tilt, twist))
 
 
 def Create_Possible_GB_Plane_List(uvw, m=5, n=1, lim=5):
@@ -232,7 +232,7 @@ def Create_Possible_GB_Plane_List(uvw, m=5, n=1, lim=5):
                    [1, 1, 0],
                    [0, 1, 1],
                    [1, 0, 1],
-                   ], dtype='float')
+                   ],dtype='float')
     # Find GB plane coordinates:
     for i in range(len(indice_0)):
         if (CommonDivisor(indice_0[i])[1] <= 1):
