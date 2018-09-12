@@ -10,7 +10,7 @@ to get the info necessary for your grain boundary of interest.
  values. For ex.: input the GB_plane of interest from  running the CSl_generator
  in the second mode. Once you have completed customizing the io_file, run:
 
- 'python gb_generator.py io_file'
+ 'gb_generator.py io_file'
  """
 
 import sys

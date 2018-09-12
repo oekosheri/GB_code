@@ -5,13 +5,13 @@ This module is a collection of functions that produce CSL properties.
 When run from the terminal, the code runs in two modes.
 
  First mode:
-  'python CSLgenerator.py u v w [limit]' ----->  Where the u v w are the
+  'csl_generator.py u v w [limit]' ----->  Where the u v w are the
   indices of the rotation axis such as 1 0 0, 1 1 1, 1 1 0 and so on. The limit
   is the maximum Sigma of interest.
   (the limit by default: 100)
 
  Second mode:
- 'python CSLgenerator.py u v w basis sigma [limit]' -----> Where basis is
+ 'csl_generator.py u v w basis sigma [limit]' -----> Where basis is
   either fcc, bcc, diamond or sc. You read the sigma of interest from the first
   mode run. The limit here refers to CSL GB inclinations. The bigger the limit,
   the higher the indices of CSL planes.
