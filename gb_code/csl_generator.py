@@ -94,11 +94,11 @@ def rot(a, Theta):
     a = a / norm(a)
     ax, ay, az = a
     return np.array([[c + ax * ax * (1 - c), ax * ay * (1 - c) - az * s,
-        ax * az * (1 - c) + ay * s],
-        [ay * ax * (1 - c) + az * s, c + ay * ay * (1 - c),
-        ay * az * (1 - c) - ax * s],
-        [az * ax * (1 - c) - ay * s, az * ay * (1 - c) + ax * s,
-        c + az * az * (1 - c)]])
+                      ax * az * (1 - c) + ay * s],
+                    [ay * ax * (1 - c) + az * s, c + ay * ay * (1 - c),
+                        ay * az * (1 - c) - ax * s],
+                     [az * ax * (1 - c) - ay * s, az * ay * (1 - c) + ax * s,
+                      c + az * az * (1 - c)]])
 
 
 # Helpful Functions:
@@ -199,7 +199,7 @@ def Tilt_Twist_comp(v1, uvw, m, n):
     else:
         twist = 2 * acos(cos(theta / 2) / cos(radians(tilt / 2)))
         print("Tilt component: {0:<6.2f} Twist component: {1:6.2f}"
-            .format(tilt, twist))
+              .format(tilt, twist))
 
 
 def Create_Possible_GB_Plane_List(uvw, m=5, n=1, lim=5):
@@ -232,10 +232,10 @@ def Create_Possible_GB_Plane_List(uvw, m=5, n=1, lim=5):
                    [1, 1, 0],
                    [0, 1, 1],
                    [1, 0, 1],
-                   ],dtype='float')
+                  ], dtype='float')
     # Find GB plane coordinates:
     for i in range(len(indice_0)):
-        if (CommonDivisor(indice_0[i])[1] <= 1):
+        if CommonDivisor(indice_0[i])[1] <= 1:
             V1[i, :] = (indice_0[i, 0] * Min_1[:, 0] +
                         indice_0[i, 1] * Min_1[:, 1] +
                         indice_0[i, 2] * Min_1[:, 2])
@@ -252,12 +252,12 @@ def Create_Possible_GB_Plane_List(uvw, m=5, n=1, lim=5):
         if ang(V1[i], uvw) < tol:
 
             for j in range(len(SymmEquivalent(MP))):
-                if (1 - ang(MeanPlanes[i], SymmEquivalent(MP)[j]) < tol):
+                if 1 - ang(MeanPlanes[i], SymmEquivalent(MP)[j]) < tol:
                     GBtype.append('Symmetric Tilt')
                     break
             else:
                 GBtype.append('Tilt')
-        elif (1 - ang(V1[i], uvw) < tol):
+        elif 1 - ang(V1[i], uvw) < tol:
             GBtype.append('Twist')
         else:
             GBtype.append('Mixed')
@@ -282,7 +282,7 @@ def Create_minimal_cell_Method_1(sigma, uvw, R):
     # remove 0 vectors and uvw from the list
     indice_0 = indice[np.where(np.sum(abs(indice), axis=1) != 0)]
     condition1 = ((abs(dot(indice_0, uvw) / norm(indice_0, axis=1) /
-                  norm(uvw))).round(7))
+                       norm(uvw))).round(7))
     indice_0 = indice_0[np.where(condition1 != 1)]
 
     if MiniCell_search(indice_0, MiniCell_1, R, sigma):
@@ -308,7 +308,7 @@ def MiniCell_search(indices, MiniCell_1, R, sigma):
     Found = False
     count = 0
     while (not Found) and count < len(TestVecs) - 1:
-        if (1 - ang(TestVecs[count], MiniCell_1[:, 2]) > tol):
+        if 1 - ang(TestVecs[count], MiniCell_1[:, 2]) > tol:
             # and  (ang(TestVecs[i],uvw) > tol):
             MiniCell_1[:, 1] = (TestVecs[count])
             count += 1
@@ -333,9 +333,9 @@ def MiniCell_search(indices, MiniCell_1, R, sigma):
                             Found = True
                             break
     if Found:
-        return (MiniCell_1, MiniCell_2)
+        return MiniCell_1, MiniCell_2
     else:
-        return (Found)
+        return Found
 
 def Basis(basis):
     """
@@ -344,12 +344,12 @@ def Basis(basis):
     # Cubic basis
     if str(basis) == 'fcc':
         basis = np.array([[0, 0, 0],
-                         [0.5, 0, 0.5],
-                         [0.5, 0.5, 0],
-                         [0, 0.5, 0.5]], dtype=float)
+                          [0.5, 0, 0.5],
+                          [0.5, 0.5, 0],
+                          [0, 0.5, 0.5]], dtype=float)
     elif str(basis) == 'bcc':
         basis = np.array([[0, 0, 0],
-                         [0.5, 0.5, 0.5]], dtype=float)
+                          [0.5, 0.5, 0.5]], dtype=float)
     elif str(basis) == 'sc':
         basis = np.eye(3)
 
@@ -358,15 +358,15 @@ def Basis(basis):
                           [0.5, 0, 0.5],
                           [0.5, 0.5, 0],
                           [0, 0.5, 0.5],
-                         [0.25, 0.25, 0.25],
-                         [0.75, 0.25, 0.75],
-                         [0.75, 0.75, 0.25],
-                         [0.25, 0.75, 0.75]], dtype=float)
+                          [0.25, 0.25, 0.25],
+                          [0.75, 0.25, 0.75],
+                          [0.75, 0.75, 0.25],
+                          [0.25, 0.75, 0.75]], dtype=float)
     else:
         print('Sorry! For now only works for cubic lattices ...')
         sys.exit()
 
-    return (basis)
+    return basis
 
 def Find_Orthogonal_cell(basis, uvw, m, n, GB1):
     """
@@ -427,13 +427,13 @@ def Find_Orthogonal_cell(basis, uvw, m, n, GB1):
 
         if basis == 'sc' or basis == 'diamond':
             return ((OrthoCell_1.astype(float),
-                    OrthoCell_2.astype(float), Num.astype(int)))
+                     OrthoCell_2.astype(float), Num.astype(int)))
 
         elif basis == 'fcc' or basis == 'bcc':
             ortho1, ortho2 = Ortho_fcc_bcc(basis, OrthoCell_1, OrthoCell_2)
             Volume_1 = (round(det(ortho1), 5))
             Num = Volume_1 * len(Basis(basis)) * 2
-            return ((ortho1, ortho2, Num.astype(int)))
+            return (ortho1, ortho2, Num.astype(int))
 
     else:
         return None
@@ -446,7 +446,7 @@ def print_list_GB_Planes(uvw, basis, m, n, lim=3):
     V1, V2, Mean, Type = Create_Possible_GB_Plane_List(uvw, m, n, lim)
     for i in range(len(V1)):
         Or = Find_Orthogonal_cell(basis, uvw, m, n, V1[i])
-        if (Or):
+        if Or:
             print ("{0:<20s}   {1:<20s}   {2:<20s}   {3:<10s}"
                    .format(str(V1[i]), str(V2[i]), Type[i], str(Or[2])))
 
@@ -469,7 +469,7 @@ def odd_even(M1):
                 d_e[i][j] = 'e'
             else:
                 d_e[i][j] = 'd'
-    return (d_e)
+    return d_e
 
 
 def self_test_b(a):
@@ -480,7 +480,7 @@ def self_test_b(a):
             z_b[i][i] = 0.5
             break
 
-    return (z_b)
+    return z_b
 
 
 def binary_test_b(a):
@@ -495,7 +495,7 @@ def binary_test_b(a):
                     count = count + 1
                     z_b[i][j] = 0.5
                     z_b[j][j] = 0.5
-    return (z_b)
+    return z_b
 
 
 def tertiary_test_b(a):
@@ -508,7 +508,7 @@ def tertiary_test_b(a):
             z_b[1][k] = 0.5
             z_b[2][k] = 0.5
             break
-    return (z_b)
+    return z_b
 
 
 def body_centering(b):
@@ -526,7 +526,7 @@ def body_centering(b):
         if det(tertiary_test_b(b)) == 0.5:
             z_b = tertiary_test_b(b)
             break
-    return (z_b)
+    return z_b
 
 
 def face_centering(a):
@@ -557,7 +557,7 @@ def face_centering(a):
                         z_f[i][j] = 0.5
                         z_f[j][j] = 0.5
 
-    return (z_f if det(z_f) == 0.25 else None)
+    return z_f if det(z_f) == 0.25 else None
 
 def DSC_vec(basis, sigma, minicell):
     """
@@ -571,7 +571,7 @@ def DSC_vec(basis, sigma, minicell):
         D = dot(D_sc, body_centering(D_sc))
     if basis == 'fcc' or basis == 'diamond':
         D = dot(D_sc, face_centering(D_sc))
-    return (D)
+    return D
 
 def CSL_vec(basis, minicell):
     """
@@ -584,7 +584,7 @@ def CSL_vec(basis, minicell):
         C = dot(C_sc, body_centering(C_sc))
     if basis == 'fcc':
         C = dot(C_sc, face_centering(C_sc))
-    return (C)
+    return C
 
 def DSC_on_plane(D, Pnormal):
     """
@@ -595,7 +595,7 @@ def DSC_on_plane(D, Pnormal):
     for i in range(3):
         D_proj[:, i] = (D[:, i] - (dot(D[:, i], Pnormal) / norm(Pnormal)) *
                         Pnormal/norm(Pnormal))
-    return (D_proj)
+    return D_proj
 
 
 def CSL_density(basis, minicell, plane):
@@ -604,13 +604,13 @@ def CSL_density(basis, minicell, plane):
     """
     plane = np.array(plane)
     C = CSL_vec(basis, minicell)
-    h = dot(C.T,plane)
+    h = dot(C.T, plane)
     h = SmallestInteger(h)[0]
     h = CommonDivisor(h)[0]
-    G = inv(dot(C.T,C))
-    hnorm = np.sqrt(dot(h.T,dot(G,h)))
+    G = inv(dot(C.T, C))
+    hnorm = np.sqrt(dot(h.T, dot(G, h)))
     density = 1/(hnorm * det(C))
-    return (abs(density),1/hnorm)
+    return (abs(density), 1/hnorm)
 
 # An auxilary function to help reduce the size of the small orthogonal cell that
 #  is decided otherwise based on Sc for fcc and bcc
@@ -762,9 +762,9 @@ def main():
             lim = int(sys.argv[6])
 
             if lim > 10:
-                print (2*'\n')
+                print(2*'\n')
                 print('You have chosen a large limit! It may take a while ...')
-                print (2*'\n')
+                print(2*'\n')
 
             print("----------List of possible CSL planes for Sigma {}---------"
                   .format(sigma))
