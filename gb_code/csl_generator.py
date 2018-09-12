@@ -33,7 +33,11 @@ def get_cubic_sigma(uvw, m, n=1):
     """
     CSL analytical formula based on the book: 'Interfaces in crystalline materials',
      Sutton and Balluffi, clarendon press, 1996.
-     generates possible sigma values given an axis and two int m and n.
+     generates possible sigma values.
+    arguments:
+    uvw -- the axis
+    m,n -- two integers (n by default 1)
+
     """
     u, v, w = uvw
     sqsum = u*u + v*v + w*w
@@ -45,7 +49,10 @@ def get_cubic_sigma(uvw, m, n=1):
 
 def get_cubic_theta(uvw, m, n=1):
     """
-    generates possible theta values given an axis and two integers m and n.
+    generates possible theta values.
+    arguments:
+    uvw -- the axis
+    m,n -- two integers (n by default 1)
     """
     u, v, w = uvw
     sqsum = u*u + v*v + w*w
@@ -87,7 +94,10 @@ def print_list(uvw, limit):
 
 def rot(a, Theta):
     """
-    produces a rotation matrix from the axis and angle.
+    produces a rotation matrix.
+    arguments:
+    a -- an axis
+    Theta -- an angle
     """
     c = cos(Theta)
     s = sin(Theta)
@@ -188,6 +198,10 @@ def SymmEquivalent(arr):
 def Tilt_Twist_comp(v1, uvw, m, n):
     """
     returns the tilt and twist components of a given GB plane.
+    arguments:
+    v1 -- given gb plane
+    uvw -- axis of rotation
+    m,n -- the two necessary integers
     """
     theta = get_cubic_theta(uvw, m, n)
     R = rot(uvw, theta)
@@ -205,6 +219,12 @@ def Tilt_Twist_comp(v1, uvw, m, n):
 def Create_Possible_GB_Plane_List(uvw, m=5, n=1, lim=5):
     """
     generates GB planes and specifies the character.
+
+    arguments:
+    uvw -- axis of rotation.
+    m,n -- the two necessary integers
+    lim -- upper limit for the plane indices
+
     """
     uvw = np.array(uvw)
     Theta = get_cubic_theta(uvw, m, n)
@@ -268,6 +288,10 @@ def Create_minimal_cell_Method_1(sigma, uvw, R):
     """
     finds Minimal cell by means of a numerical search.
     (An alternative analytical method can be used too).
+    arguments:
+    sigma -- gb sigma
+    uvw -- rotation axis
+    R -- rotation matrix
     """
     uvw = np.array(uvw)
     MiniCell_1 = np.zeros([3, 3])
@@ -294,9 +318,6 @@ def Create_minimal_cell_Method_1(sigma, uvw, R):
 
 
 def MiniCell_search(indices, MiniCell_1, R, sigma):
-    """
-    a numerical search routine for the minimal cell.
-    """
 
     tol = 0.001
     # norm1 = norm(indices, axis=1)
@@ -371,6 +392,11 @@ def Basis(basis):
 def Find_Orthogonal_cell(basis, uvw, m, n, GB1):
     """
     finds Orthogonal cells from the CSL minimal cells.
+    arguments:
+    basis -- lattice basis
+    uvw -- rotation axis
+    m,n -- two necessary integers
+    GB1 -- input plane orientation
     """
     # Changeable limit
     lim = 15
@@ -563,6 +589,10 @@ def DSC_vec(basis, sigma, minicell):
     """
     a discrete shift complete (DSC)
     network for the given sigma and minimal cell.
+    arguments:
+    basis -- a lattice basis(fcc or bcc)
+    sigma -- gb sigma
+    minicell -- gb minimal cell
     """
     D_sc = np.round(sigma * (inv(minicell).T), 6).astype(int)
     if basis == 'sc':
@@ -576,6 +606,9 @@ def DSC_vec(basis, sigma, minicell):
 def CSL_vec(basis, minicell):
     """
     CSL minimal cell for sc, fcc and bcc.
+    arguments:
+    basis -- a lattice basis(fcc or bcc)
+    minicell -- gb minimal cell
     """
     C_sc = minicell.copy()
     if basis == 'sc':
