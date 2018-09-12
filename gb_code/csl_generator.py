@@ -45,7 +45,7 @@ def get_cubic_sigma(uvw, m, n=1):
 
 def get_cubic_theta(uvw, m, n=1):
     """
-    generates possible theta values given an axis and two int m and n.
+    generates possible theta values given an axis and two integers m and n.
     """
     u, v, w = uvw
     sqsum = u*u + v*v + w*w
@@ -76,7 +76,7 @@ def get_theta_m_n_list(uvw, sigma):
 
 def print_list(uvw, limit):
     """
-    prints a list of smallest sigmas/angles for a given axis.
+    prints a list of smallest sigmas/angles for a given axis(uvw).
     """
     for i in range(limit):
         tt = get_theta_m_n_list(uvw, i)
@@ -87,7 +87,7 @@ def print_list(uvw, limit):
 
 def rot(a, Theta):
     """
-    produces a rotation matrix from the angle and axis.
+    produces a rotation matrix from the axis and angle.
     """
     c = cos(Theta)
     s = sin(Theta)
@@ -204,7 +204,7 @@ def Tilt_Twist_comp(v1, uvw, m, n):
 
 def Create_Possible_GB_Plane_List(uvw, m=5, n=1, lim=5):
     """
-    generate GB planes and specifies the character.
+    generates GB planes and specifies the character.
     """
     uvw = np.array(uvw)
     Theta = get_cubic_theta(uvw, m, n)
@@ -295,7 +295,7 @@ def Create_minimal_cell_Method_1(sigma, uvw, R):
 
 def MiniCell_search(indices, MiniCell_1, R, sigma):
     """
-    a numerical search for the minimal cell.
+    a numerical search routine for the minimal cell.
     """
 
     tol = 0.001

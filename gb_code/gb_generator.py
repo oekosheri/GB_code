@@ -52,7 +52,8 @@ class GB_character:
 
     def ParseGB(self, axis, basis, LatP, m, n, gb):
         """
-        parses the GB input.
+        parses the GB input axis, basis, lattice parameter,
+        m and n integers and gb plane.
         """
         self.axis = np.array(axis)
         self.m = int(m)
@@ -88,7 +89,8 @@ class GB_character:
                 dim1=1, dim2=1, dim3=1, file='LAMMPS',
                 **kwargs):
         """
-        parses the arguments and writes the final structure to the file.
+        parses the arguments overlap distance, dimensions, rigid body translate
+        and file type and writes the final structure to the file.
         Possible keys:
             (whichG, a, b)
         """
