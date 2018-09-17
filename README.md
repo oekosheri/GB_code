@@ -176,7 +176,8 @@ For the annealing simulations I use an _nvt_ ensemble followed by damped dynamic
 # Questions/Contributions
 If you have any questions, raise an issue or contact [me](mailto:shahrzadhadian@gmail.com).
 Feel free to use the code anyway you like, if you find it useful please cite the paper.
-At the moment I am the main contributor of this code. If I decide to accept contributions I will anounce it here.
+This project is currently under development and at the moment I am not accepting contributions from other users. 
+Should this change in the future I'll provide detailed information on how to contribute to the project.
 
 
 # License
