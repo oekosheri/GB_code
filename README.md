@@ -6,7 +6,7 @@ There are two main scripts: [_csl_generator.py_](./csl_generator.py) and [_gb_ge
 from the command line.
 In this README I will explain the steps to use the code in the Terminal and I have also attached two _jupyter notebooks_ ([Usage_of_GB_code.ipynb](./Usage_of_GB_code.ipynb), [Dichromatic_pattern_CSL.ipynb](./Dichromatic_pattern_CSL.ipynb)) in the [Test](./Test) directory which describe how the code can be accessed and used in the notebooks by various examples. These notebooks have extra functionality. The former is for the general usage of the code with some tips to locate GBs of interest, the latter depicts how CSL construction can be used for different purposes.
 You can use [this link](https://mybinder.org/v2/gh/oekosheri/GB_code/master) for an interactive Jupyter notebook environment provided by Binder. [![Binder](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/oekosheri/GB_code/master)
-To use it locally, you will need python3 and numpy1.14 for the main scripts and additionally matplotlib and pandas to use the auxilliary Jupyter notebooks.
+To use it locally, you will need `python> 3.5.1` and `numpy > 1.14` for the main scripts and additionally matplotlib and pandas to use the auxilliary Jupyter notebooks.
 
 # Installation guide
 For installation simply clone or download the code in your terminal and in the main directory of the package type:
