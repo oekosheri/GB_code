@@ -1,6 +1,6 @@
 from setuptools import setup
 
-packages = [ 
+packages = [
 				'gb_code',
        ]
 
@@ -8,7 +8,8 @@ INSTALL_REQUIRES = (
     ['numpy >= 1.14.0'] )
 
 setup(
-			 name='GB_code',
+	name='GB_code',
+    python_requires='>3.5.1',
     version='0.1.0',
     author='R.Hadian',
     author_email='shahrzadhadian@gmail.com',
