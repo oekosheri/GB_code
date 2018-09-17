@@ -10,7 +10,7 @@ INSTALL_REQUIRES = (
 setup(
 	name='GB_code',
     python_requires='>3.5.1',
-    version='0.1.0',
+    version='1.0.0',
     author='R.Hadian',
     author_email='shahrzadhadian@gmail.com',
     packages=packages,
