@@ -174,10 +174,10 @@ The 0K miminimization is composed of: A conjugate gradient minimization of the e
 similar to a procedure explained [here](https://icme.hpc.msstate.edu/mediawiki/index.php/LAMMPS_Input_Deck_for_Grain_boundary_generation).
 For the annealing simulations I use an _nvt_ ensemble followed by damped dynamics. Depending on the GB structure and your final purpose you can run annealing simulations for different time spans.
 # Questions/Contribution
-
-At the moment I am the main contributor of this code. If I decide to accept contributions I will anounce it here.
 If you have any questions, raise an issue or contact [me](mailto:shahrzadhadian@gmail.com).
 Feel free to use the code anyway you like, if you find it useful please cite the paper.
+At the moment I am the main contributor of this code. If I decide to accept contributions I will anounce it here.
+
 
 # License
 [MIT](./LICENSE).
