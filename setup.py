@@ -4,6 +4,8 @@ packages = [
 				'gb_code',
        ]
 
+INSTALL_REQUIRES = (
+    ['numpy >= 1.14.0'] )
 
 setup(
 			 name='GB_code',
@@ -11,6 +13,7 @@ setup(
     author='R.Hadian',
     author_email='shahrzadhadian@gmail.com',
     packages=packages,
+				install_requires=INSTALL_REQUIRES,
 				entry_points = {
         'console_scripts': [
             'csl_generator = gb_code.csl_generator:main',
