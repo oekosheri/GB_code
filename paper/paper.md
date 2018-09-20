@@ -34,7 +34,7 @@ but the modules can also be accessed separately for example via the attached Jup
 ``GB_code`` uses the analytical and mathematical formulations of the following works [@Sutton:1996, @Bollmann:1982, @Grimmer]. Some functionality from this code [@Marcin] on CSL has been used in a modified form in the ``GB_code``. 
 
 ### Statement of need:
-``GB_code`` is an interative toolbox to learn about grain boundaries and it is versatile for running high-throughput calculations. The target audience are students/scientists of materials science and physics at any level of familiarity with the topic. Extensive use of NumPy library in GB_code results in faster execution, especially when computing large structures. The user will be guided through in a step by step manner how to find and create the GB of interest. The code has been designed to be simple to use and instructive with a special attention to GB plane orientation which is often lacking in other grain boundary creation codes.
+``GB_code`` is an interactive toolbox to learn about grain boundaries and it is versatile for running high-throughput calculations. The target audience are students/scientists of materials science and physics at any level of familiarity with the topic. Extensive use of NumPy library in GB_code results in faster execution, especially when computing large structures. The user will be guided through in a step by step manner how to find and create the GB of interest. The code has been designed to be simple to use and instructive with a special attention to GB plane orientation which is often lacking in other grain boundary creation codes.
 
 # Acknowledgements
 
