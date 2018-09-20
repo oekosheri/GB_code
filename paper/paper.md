@@ -16,7 +16,7 @@ authors:
   - name: J. Neugebauer
     affiliation: 1
 affiliations:
- - name: Max-Planck-institut fuer Eisenforschung
+ - name: Max-Planck-Institut fuer Eisenforschung, Duesseldorf, Germany
    index: 1
 date: 19 July 2018
 bibliography: paper.bib
