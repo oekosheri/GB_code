@@ -180,7 +180,7 @@ This project is currently under development and at the moment I am not accepting
 Should this change in the future I'll provide detailed information on how to contribute to the project.
 
 # Citation
-Feel free to use the code anyway you like, if you find it useful please cite the paper.
+Feel free to use the code anyway you like, if you find it useful please cite the paper:
 Hadian et al., (2018). GB code: A grain boundary generation code. Journal of Open Source Software, 3(29), 900, https://doi.org/10.21105/joss.0090
 [![DOI](http://joss.theoj.org/papers/10.21105/joss.00900/status.svg)](https://doi.org/10.21105/joss.00900)
 
