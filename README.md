@@ -182,6 +182,4 @@ Should this change in the future I'll provide detailed information on how to con
 
 
 # License
-[MIT](./LICENSE).  
-
-
+[MIT](./LICENSE).
