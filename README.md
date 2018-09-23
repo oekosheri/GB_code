@@ -1,4 +1,5 @@
 # GB_code
+
 This python package helps you create orthogonal grain boundary supercells for atomistic calculations. The code is based on the coincident site lattice (CSL) formulations for cubic materials (sc, bcc, fcc, diamond). I intend to extend it to hcp structures soon. The code produces a final structure to be read in [LAMMPS](https://lammps.sandia.gov/) or [VASP](https://www.vasp.at/).  
 The code has been designed to be simple to use and instructive with a special attention to GB plane orientation which is often lacking in other grain boundary creation codes. For more details please read the [paper](./paper/paper.md). 
 
