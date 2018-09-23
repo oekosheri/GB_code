@@ -1,4 +1,4 @@
-# GB_code
+# GB_code [![DOI](http://joss.theoj.org/papers/10.21105/joss.00900/status.svg)](https://doi.org/10.21105/joss.00900)
 This python package helps you create orthogonal grain boundary supercells for atomistic calculations. The code is based on the coincident site lattice (CSL) formulations for cubic materials (sc, bcc, fcc, diamond). I intend to extend it to hcp structures soon. The code produces a final structure to be read in [LAMMPS](https://lammps.sandia.gov/) or [VASP](https://www.vasp.at/).  
 The code has been designed to be simple to use and instructive with a special attention to GB plane orientation which is often lacking in other grain boundary creation codes. For more details please read the [paper](./paper/paper.md).     
 
@@ -176,10 +176,13 @@ similar to a procedure explained [here](https://icme.hpc.msstate.edu/mediawiki/i
 For the annealing simulations I use an _nvt_ ensemble followed by damped dynamics. Depending on the GB structure and your final purpose you can run annealing simulations for different time spans.
 # Questions/Contributions
 If you have any questions, raise an issue or contact [me](mailto:shahrzadhadian@gmail.com).
-Feel free to use the code anyway you like, if you find it useful please cite the paper.
 This project is currently under development and at the moment I am not accepting contributions from other users. 
 Should this change in the future I'll provide detailed information on how to contribute to the project.
 
+# Citation
+Feel free to use the code anyway you like, if you find it useful please cite the paper.
+Hadian et al., (2018). GB code: A grain boundary generation code. Journal of Open Source Software, 3(29), 900, https://doi.org/10.21105/joss.0090
+[![DOI](http://joss.theoj.org/papers/10.21105/joss.00900/status.svg)](https://doi.org/10.21105/joss.00900)
 
 # License
 [MIT](./LICENSE).  
