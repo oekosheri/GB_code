@@ -13,6 +13,7 @@ to get the info necessary for your grain boundary of interest.
  'gb_generator.py io_file'
  """
 
+from ase.atoms import Atoms
 import sys
 import numpy as np
 from numpy import dot, cross
@@ -137,6 +138,8 @@ class GB_character:
                     self.Write_to_Lammps(count)
                 elif self.File == "VASP":
                     self.Write_to_Vasp(count)
+                elif self.File == "ASE":
+                    return self.Write_to_ASE(count)
                 else:
                     print("The output file must be either LAMMPS or VASP!")
             elif self.trans:
@@ -162,6 +165,8 @@ class GB_character:
                     self.Write_to_Lammps(count)
                 elif self.File == "VASP":
                     self.Write_to_Vasp(count)
+                elif self.File == "ASE":
+                    return self.Write_to_ASE(count)
                 else:
                     print("The output file must be either LAMMPS or VASP!")
         else:
@@ -448,6 +453,17 @@ class GB_character:
             f.write('Atoms \n \n')
             np.savetxt(f, FinalMat, fmt='%i %i %.8f %.8f %.8f')
         f.close()
+        
+    def Write_to_ASE(self, trans):  
+        X_new = self.atoms1 * self.LatP
+        Y_new = self.atoms2 * self.LatP
+        dimx, dimy, dimz = self.dim
+
+        cell = [[2*np.round(norm(self.ortho1[:, 0]) * dimx * self.LatP, 8), 0.0, 0.0], 
+                [0.0, np.round(norm(self.ortho1[:, 1]) * dimy * self.LatP, 8), 0.0], 
+                [0.0, 0.0, np.round(norm(self.ortho1[:, 2]) * dimz * self.LatP, 8)]]
+
+        return Atoms(positions=np.concatenate((X_new, Y_new)), cell=cell)
 
     def __str__(self):
         return "GB_character"
