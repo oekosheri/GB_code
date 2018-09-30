@@ -806,7 +806,7 @@ def main():
 
             print_list_GB_Planes(uvw, basis, m, n, lim)
             print(" \nPick a GB plane and customize the io_file! ")
-            print(" then run : python gb_generator.py io_file\n ")
+            print(" then run : gb_generator io_file\n ")
 
         except:
             print("Your input sigma is wrong!")
