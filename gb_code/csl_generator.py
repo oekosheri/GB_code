@@ -157,6 +157,24 @@ def SmallestInteger(a):
             break
     return (testV, i) if integer_array(testV) else None
 
+def integerMatrix(a):
+    """
+    returns an integer matrix from row vectors.
+    """
+    Found = True
+    b = np.zeros((3,3))
+    a = np.array(a)
+    for i in range(3):
+        for j in range(1, 2000):
+            testV = j * a[i]
+            if integer_array(testV):
+                b[i] = testV
+                break
+        if all(b[i] == 0):
+            Found = False
+            print("Can not make integer matrix!")
+    return (b) if Found else None
+
 def SymmEquivalent(arr):
     """
     returns cubic symmetric eqivalents of the given 2 dimensional vector.
@@ -419,19 +437,23 @@ def Find_Orthogonal_cell(basis, uvw, m, n, GB1):
     Min_1, Min_2 = Create_minimal_cell_Method_1(Sigma, uvw, R)
     # Find Ortho vectors:
     tol = 0.001
-    Found = False
-    for i in range(len(indice_0)):
-        v1 = (indice_0[i, 0] * Min_1[:, 0] +
-              indice_0[i, 1] * Min_1[:, 1] +
-              indice_0[i, 2] * Min_1[:, 2])
-        v2 = (indice_0[i, 0] * Min_2[:, 0] +
-              indice_0[i, 1] * Min_2[:, 1] +
-              indice_0[i, 2] * Min_2[:, 2])
-        if ang(v1, OrthoCell_1[:, 0]) < tol:
-            OrthoCell_1[:, 1] = v1
-            OrthoCell_2[:, 1] = v2
-            Found = True
-            break
+    if ang(OrthoCell_1[:, 0], uvw) < tol:
+        OrthoCell_1[:, 1] = uvw
+        OrthoCell_2[:, 1] = uvw
+    else:
+
+        for i in range(len(indice_0)):
+
+            v1 = (indice_0[i, 0] * Min_1[:, 0] +
+                  indice_0[i, 1] * Min_1[:, 1] +
+                  indice_0[i, 2] * Min_1[:, 2])
+            v2 = (indice_0[i, 0] * Min_2[:, 0] +
+                  indice_0[i, 1] * Min_2[:, 1] +
+                  indice_0[i, 2] * Min_2[:, 2])
+            if ang(v1, OrthoCell_1[:, 0]) < tol:
+                OrthoCell_1[:, 1] = v1
+                OrthoCell_2[:, 1] = v2
+                break
     OrthoCell_1[:, 2] = np.cross(OrthoCell_1[:, 0], OrthoCell_1[:, 1])
     OrthoCell_2[:, 2] = np.cross(OrthoCell_2[:, 0], OrthoCell_2[:, 1])
 
@@ -451,7 +473,8 @@ def Find_Orthogonal_cell(basis, uvw, m, n, GB1):
         OrthoCell_1 = OrthoCell_1.astype(float)
         OrthoCell_2 = OrthoCell_2.astype(float)
 
-        if basis == 'sc' or basis == 'diamond':
+        if basis == 'sc' or basis == 'diamond' :
+
             return ((OrthoCell_1.astype(float),
                      OrthoCell_2.astype(float), Num.astype(int)))
 

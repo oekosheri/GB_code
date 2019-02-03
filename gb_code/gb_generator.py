@@ -174,13 +174,14 @@ class GB_character:
         populates a unitcell from the orthogonal vectors.
         """
         Or = self.ortho.T
+        Orint = cslgen.integerMatrix(Or)
         LoopBound = np.zeros((3, 2), dtype=float)
         transformed = []
         CubeCoords = np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1], [1, 1, 0],
                               [0, 1, 1], [1, 0, 1], [1, 1, 1], [0, 0, 0]],
                               dtype=float)
         for i in range(len(CubeCoords)):
-            transformed.append(np.dot(Or.T, CubeCoords[i]))
+            transformed.append(np.dot(Orint.T, CubeCoords[i]))
 
         # Finding bounds for atoms in a CSL unitcell:
 
