@@ -98,6 +98,8 @@ class GB_character:
         self.trans = rigid
         self.dim = np.array([int(dim1), int(dim2), int(dim3)])
         self.File = file
+        self.Expand_Super_cell()
+        
         if self.overD > 0:
             try:
                 self.whichG = kwargs['whichG']
@@ -133,7 +135,6 @@ class GB_character:
             print ("<<------ {} atoms are being removed! ------>>"
                     .format(n_deleted))
 
-            self.Expand_Super_cell()
             if not self.trans:
                 count = 0
                 print ("<<------ 1 GB structure is being created! ------>>")
@@ -155,11 +156,9 @@ class GB_character:
                     print('Make sure the a and b integers are there!')
                     sys.exit()
                 print ("<<------ 0 atoms are being removed! ------>>")
-                self.Expand_Super_cell()
                 self.Translate(a, b)
 
             else:
-                self.Expand_Super_cell()
                 count = 0
                 print ("<<------ 1 GB structure is being created! ------>>")
                 if self.File == "LAMMPS":
