@@ -120,13 +120,9 @@ class GB_character:
 
             if self.whichG == "G1" or self.whichG == "g1":
                 self.atoms1 = np.delete(self.atoms1, x_indice, axis=0)
-                xdel[:, 0] += norm(self.ortho1[:, 0])
-                self.atoms1 = np.vstack((self.atoms1, xdel))
                 n_deleted = len(xdel)
             elif self.whichG == "G2" or self.whichG == "g2":
                 self.atoms2 = np.delete(self.atoms2, y_indice, axis=0)
-                ydel[:, 0] -= norm(self.ortho1[:, 0])
-                self.atoms2 = np.vstack((self.atoms2, ydel))
                 n_deleted = len(ydel)
             else:
                 print("You must choose either 'g1', 'g2' ")
@@ -140,7 +136,9 @@ class GB_character:
             print('Overlap distance is not inputted incorrectly!')
             sys.exit()
 
-        if not self.trans:
+        if self.trans:
+            self.Translate(a, b)
+        else:
             count = 0
             print ("<<------ 1 GB structure is being created! ------>>")
             if self.File == "LAMMPS":
@@ -149,8 +147,6 @@ class GB_character:
                 self.Write_to_Vasp(count)
             else:
                 print("The output file must be either LAMMPS or VASP!")
-        elif self.trans:
-            self.Translate(a, b)
 
     def CSL_Ortho_unitcell_atom_generator(self):
 
@@ -268,19 +264,67 @@ class GB_character:
         """
         finds the overlapping atoms.
         """
-        IndX = np.where(self.atoms1[:, 0] < 1)[0]
-        IndY = np.where(self.atoms2[:, 0] > -1)[0]
-        X_new = self.atoms1[IndX]
-        Y_new = self.atoms2[IndY]
-        x = np.arange(0, len(X_new), 1)
-        y = np.arange(0, len(Y_new), 1)
-        indice = (np.stack(np.meshgrid(x, y)).T).reshape(len(x) * len(y), 2)
-        norms = norm(X_new[indice[:, 0]] - Y_new[indice[:, 1]], axis=1)
-        indice_x = indice[norms < self.overD][:, 0]
-        indice_y = indice[norms < self.overD][:, 1]
-        X_del = X_new[indice_x]
-        Y_del = Y_new[indice_y]
-        return (X_del, Y_del, IndX[indice_x], IndY[indice_y])
+        # Find atoms near either of the two GBs
+        L_a = norm(self.ortho1[:, 0]) * (2 * self.dim[0])
+        
+        g1_x = self.atoms1[:, 0]
+        g1_border1_indices = np.where(g1_x < self.overD)[0]
+        g1_border2_indices = np.where(g1_x > 0.5 * L_a - self.overD)[0]
+        
+        g2_x = self.atoms2[:, 0]
+        g2_border1_indices = np.where(g2_x > -self.overD)[0]
+        g2_border2_indices = np.where(g2_x < -0.5 * L_a + self.overD)[0]
+        
+        # Within those subsets, find atoms close to atoms from the other GB
+        g1_border1 = self.atoms1[g1_border1_indices]
+        g1_border2 = self.atoms1[g1_border2_indices]
+        g2_border1 = self.atoms2[g2_border1_indices]
+        g2_border2 = self.atoms2[g2_border2_indices] + [L_a, 0, 0]
+        
+        ids_g1b1, ids_g2b1 = self.Find_overlap_in_subset(g1_border1, g2_border1)
+        ids_g1b2, ids_g2b2 = self.Find_overlap_in_subset(g1_border2, g2_border2)
+        
+        # Map the indices of the subset back to global atom indices and return
+        global_ids_g1 = np.append(g1_border1_indices[ids_g1b1],
+                                  g1_border2_indices[ids_g1b2])
+        global_ids_g2 = np.append(g2_border1_indices[ids_g2b1],
+                                  g2_border2_indices[ids_g2b2])
+                                  
+        return self.atoms1[global_ids_g1], self.atoms2[global_ids_g2], \
+          np.unique(global_ids_g1), np.unique(global_ids_g2)
+    
+    def Find_overlap_in_subset(self, pos_1, pos_2):
+        """
+        get the indices of atoms from two groups which are within the overlap
+        cutoff of each other. Assumes a rectangular prism with the groups split 
+        along the x-axis.
+        """
+        reps = np.array([-1, 0, 1])
+        x_shifts = [0]
+        y_shifts = self.dim[1] * norm(self.ortho1[:, 1]) * reps
+        z_shifts = self.dim[2] * norm(self.ortho1[:, 2]) * reps
+        planar_shifts = np.array(np.meshgrid(x_shifts, y_shifts, z_shifts)).T.reshape(-1, 3)
+        n_images = len(planar_shifts)
+        n_1 = len(pos_1)
+        n_2 = len(pos_2)
+        n_1_images = n_images * n_1
+        
+        pos_1_images = pos_1.repeat(n_images, axis=0) + np.tile(planar_shifts, (n_1, 1))
+        pos_1_image_index_map = np.arange(n_1).repeat(n_images)
+        
+        pos_1_rep = pos_1_images.repeat(n_2, axis=0)
+        pos_1_index_map = pos_1_image_index_map.repeat(n_2)
+        
+        pos_2_rep = np.tile(pos_2, (n_1_images, 1))
+        pos_2_index_map = np.tile(np.arange(n_2), n_1_images)
+        
+        distances = norm(pos_1_rep - pos_2_rep, axis=1)
+        close_ids = np.argwhere(distances < self.overD).T[0]
+        
+        close_ids_1 = pos_1_index_map[close_ids]
+        close_ids_2 = pos_2_index_map[close_ids]
+
+        return np.unique(close_ids_1), np.unique(close_ids_2)
 
     def Translate(self, a, b):
 
