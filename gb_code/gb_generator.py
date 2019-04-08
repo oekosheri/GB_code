@@ -287,10 +287,10 @@ class GB_character:
         """
         finds the overlapping atoms.
         """
-        IndX = np.where([self.atoms1[:, 0] < 1])[1]
-        IndY = np.where([self.atoms2[:, 0] > -1])[1]
-        X_new = self.atoms1[self.atoms1[:, 0] < 1]
-        Y_new = self.atoms2[self.atoms2[:, 0] > -1]
+        IndX = np.where(self.atoms1[:, 0] < 1)[0]
+        IndY = np.where(self.atoms2[:, 0] > -1)[0]
+        X_new = self.atoms1[IndX]
+        Y_new = self.atoms2[IndY]
         x = np.arange(0, len(X_new), 1)
         y = np.arange(0, len(Y_new), 1)
         indice = (np.stack(np.meshgrid(x, y)).T).reshape(len(x) * len(y), 2)
