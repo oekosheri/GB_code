@@ -261,30 +261,27 @@ class GB_character:
         """
         expands the smallest CSL unitcell to the given dimensions.
         """
+        # Calculate unit cell displacements along each axis
         a = norm(self.ortho1[:, 0])
         b = norm(self.ortho1[:, 1])
         c = norm(self.ortho1[:, 2])
         dimX, dimY, dimZ = self.dim
 
-        X = self.atoms1.copy()
-        Y = self.atoms2.copy()
+        x1_shifts = a * np.arange(dimX)
+        x2_shifts = -a * np.arange(dimX)
+        y_shifts = b * np.arange(dimY)
+        z_shifts = c * np.arange(dimZ)
+        
+        # Get all unique combinations of the shifts
+        g1_shifts = np.array(np.meshgrid(x1_shifts, y_shifts, z_shifts)).T.reshape(-1, 3)
+        g2_shifts = np.array(np.meshgrid(x2_shifts, y_shifts, z_shifts)).T.reshape(-1, 3)
 
-        X_new = []
-        Y_new = []
-        for i in range(dimX):
-            for j in range(dimY):
-                for k in range(dimZ):
-                    Position1 = [i * a, j * b, k * c]
-                    Position2 = [-i * a, j * b, k * c]
-                    for l in range(len(X)):
-                        X_new.append(Position1[0:3] + X[l, 0:3])
-                    for m in range(len(Y)):
-                        Y_new.append(Position2[0:3] + Y[m, 0:3])
-
-        self.atoms1 = np.array(X_new)
-        self.atoms2 = np.array(Y_new)
-
-        return
+        # Duplicate every atom for each available shift
+        copy1 = self.atoms1.copy()
+        copy2 = self.atoms2.copy()
+        
+        self.atoms1 = copy1.repeat(len(g1_shifts), axis=0) + np.tile(g1_shifts, (len(copy1), 1))
+        self.atoms2 = copy2.repeat(len(g2_shifts), axis=0) + np.tile(g2_shifts, (len(copy2), 1))
 
     def Find_overlapping_Atoms(self):
 
