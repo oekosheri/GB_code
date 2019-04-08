@@ -113,22 +113,26 @@ class GB_character:
                     sys.exit()
 
             xdel, ydel, x_indice, y_indice = self.Find_overlapping_Atoms()
-            print ("<<------ {} atoms are being removed! ------>>"
-                    .format(len(xdel)))
 
             if self.whichG == "G1" or self.whichG == "g1":
                 self.atoms1 = np.delete(self.atoms1, x_indice, axis=0)
                 xdel[:, 0] = xdel[:, 0] + norm(self.ortho1[:, 0])
                 self.atoms1 = np.vstack((self.atoms1, xdel))
+                n_deleted = len(xdel)
 
             elif self.whichG == "G2" or self.whichG == "g2":
                 self.atoms2 = np.delete(self.atoms2, y_indice, axis=0)
                 ydel[:, 0] = ydel[:, 0] - norm(self.ortho1[:, 0])
                 self.atoms2 = np.vstack((self.atoms2, ydel))
+                n_deleted = len(ydel)
 
             else:
                 print("You must choose either 'g1', 'g2' ")
                 sys.exit()
+
+            print ("<<------ {} atoms are being removed! ------>>"
+                    .format(n_deleted))
+
             self.Expand_Super_cell()
             if not self.trans:
                 count = 0
