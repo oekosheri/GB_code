@@ -100,19 +100,21 @@ class GB_character:
         self.File = file
         self.Expand_Super_cell()
         
+        if self.trans:
+            # Ensure needed variables exist before wasting time on computation
+            try:
+                a = int(kwargs['a'])
+                b = int(kwargs['b'])
+            except:
+                print('Make sure the a and b integers are there!')
+                sys.exit()
+        
         if self.overD > 0:
             try:
                 self.whichG = kwargs['whichG']
             except:
                 print('decide on whichG!')
                 sys.exit()
-            if self.trans:
-                try:
-                    a = int(kwargs['a'])
-                    b = int(kwargs['b'])
-                except:
-                    print('Make sure the a and b integers are there!')
-                    sys.exit()
 
             xdel, ydel, x_indice, y_indice = self.Find_overlapping_Atoms()
 
@@ -121,55 +123,34 @@ class GB_character:
                 xdel[:, 0] += norm(self.ortho1[:, 0])
                 self.atoms1 = np.vstack((self.atoms1, xdel))
                 n_deleted = len(xdel)
-
             elif self.whichG == "G2" or self.whichG == "g2":
                 self.atoms2 = np.delete(self.atoms2, y_indice, axis=0)
                 ydel[:, 0] -= norm(self.ortho1[:, 0])
                 self.atoms2 = np.vstack((self.atoms2, ydel))
                 n_deleted = len(ydel)
-
             else:
                 print("You must choose either 'g1', 'g2' ")
                 sys.exit()
 
             print ("<<------ {} atoms are being removed! ------>>"
                     .format(n_deleted))
-
-            if not self.trans:
-                count = 0
-                print ("<<------ 1 GB structure is being created! ------>>")
-                if self.File == "LAMMPS":
-                    self.Write_to_Lammps(count)
-                elif self.File == "VASP":
-                    self.Write_to_Vasp(count)
-                else:
-                    print("The output file must be either LAMMPS or VASP!")
-            elif self.trans:
-                self.Translate(a, b)
-
         elif self.overD == 0:
-            if self.trans:
-                try:
-                    a = int(kwargs['a'])
-                    b = int(kwargs['b'])
-                except:
-                    print('Make sure the a and b integers are there!')
-                    sys.exit()
-                print ("<<------ 0 atoms are being removed! ------>>")
-                self.Translate(a, b)
-
-            else:
-                count = 0
-                print ("<<------ 1 GB structure is being created! ------>>")
-                if self.File == "LAMMPS":
-                    self.Write_to_Lammps(count)
-                elif self.File == "VASP":
-                    self.Write_to_Vasp(count)
-                else:
-                    print("The output file must be either LAMMPS or VASP!")
+            print ("<<------ 0 atoms are being removed! ------>>")
         else:
             print('Overlap distance is not inputted incorrectly!')
             sys.exit()
+
+        if not self.trans:
+            count = 0
+            print ("<<------ 1 GB structure is being created! ------>>")
+            if self.File == "LAMMPS":
+                self.Write_to_Lammps(count)
+            elif self.File == "VASP":
+                self.Write_to_Vasp(count)
+            else:
+                print("The output file must be either LAMMPS or VASP!")
+        elif self.trans:
+            self.Translate(a, b)
 
     def CSL_Ortho_unitcell_atom_generator(self):
 
