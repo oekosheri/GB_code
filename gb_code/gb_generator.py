@@ -1,5 +1,5 @@
 
-#!/usr/bin/env python
+# !/usr/bin/env python
 """
 This module produces GB structures. You need to run csl_generator first
 to get the info necessary for your grain boundary of interest.
@@ -7,8 +7,9 @@ to get the info necessary for your grain boundary of interest.
  The code runs in one mode only and takes all the necessary options to write
  a final GB structure from the input io_file, which is written  after you run
  csl_generator.py. You must customize the io_file that comes with some default
- values. For ex.: input the GB_plane of interest from  running the CSl_generator
- in the second mode. Once you have completed customizing the io_file, run:
+ values. For ex.: input the GB_plane of interest from  running the
+ CSl_generator in the second mode. Once you have completed customizing the
+ io_file, run:
 
  'gb_generator.py io_file'
  """
@@ -17,7 +18,7 @@ import sys
 import numpy as np
 from numpy import dot, cross
 from numpy.linalg import det, norm
-import gb_code.csl_generator as cslgen
+import csl_generator as cslgen
 import warnings
 
 
@@ -71,8 +72,12 @@ class GB_character:
             self.gbplane = np.array(gb)
 
             try:
-                self.ortho1, self.ortho2, self.Num = cslgen.Find_Orthogonal_cell(
-                            self.basis, self.axis, self.m, self.n, self.gbplane)
+                self.ortho1, self.ortho2, self.Num = \
+                    cslgen.Find_Orthogonal_cell(self.basis,
+                                                self.axis,
+                                                self.m,
+                                                self.n,
+                                                self.gbplane)
 
             except:
                 print("""
@@ -111,28 +116,23 @@ class GB_character:
                 except:
                     print('Make sure the a and b integers are there!')
                     sys.exit()
-
-            xdel, ydel, x_indice, y_indice = self.Find_overlapping_Atoms()
-            print ("<<------ {} atoms are being removed! ------>>"
-                    .format(len(xdel)))
+            self.Expand_Super_cell()
+            xdel, _, x_indice, y_indice = self.Find_overlapping_Atoms()
+            print("<<------ {} atoms are being removed! ------>>"
+                  .format(len(xdel)))
 
             if self.whichG == "G1" or self.whichG == "g1":
                 self.atoms1 = np.delete(self.atoms1, x_indice, axis=0)
-                xdel[:, 0] = xdel[:, 0] + norm(self.ortho1[:, 0])
-                self.atoms1 = np.vstack((self.atoms1, xdel))
 
             elif self.whichG == "G2" or self.whichG == "g2":
                 self.atoms2 = np.delete(self.atoms2, y_indice, axis=0)
-                ydel[:, 0] = ydel[:, 0] - norm(self.ortho1[:, 0])
-                self.atoms2 = np.vstack((self.atoms2, ydel))
 
             else:
                 print("You must choose either 'g1', 'g2' ")
                 sys.exit()
-            self.Expand_Super_cell()
             if not self.trans:
                 count = 0
-                print ("<<------ 1 GB structure is being created! ------>>")
+                print("<<------ 1 GB structure is being created! ------>>")
                 if self.File == "LAMMPS":
                     self.Write_to_Lammps(count)
                 elif self.File == "VASP":
@@ -150,14 +150,14 @@ class GB_character:
                 except:
                     print('Make sure the a and b integers are there!')
                     sys.exit()
-                print ("<<------ 0 atoms are being removed! ------>>")
+                print("<<------ 0 atoms are being removed! ------>>")
                 self.Expand_Super_cell()
                 self.Translate(a, b)
 
             else:
                 self.Expand_Super_cell()
                 count = 0
-                print ("<<------ 1 GB structure is being created! ------>>")
+                print("<<------ 1 GB structure is being created! ------>>")
                 if self.File == "LAMMPS":
                     self.Write_to_Lammps(count)
                 elif self.File == "VASP":
@@ -204,7 +204,8 @@ class GB_character:
         Atoms = []
         tol = 0.001
         if V > 5e6:
-            print("Warning! It may take a very long time to produce this cell!")
+            print("Warning! It may take a very long time"
+                  "to produce this cell!")
         # produce Atoms:
 
         for i in range(V):
@@ -250,7 +251,8 @@ class GB_character:
 
         self.atoms1 = dot(self.rot1, self.atoms1.T).T
         self.atoms2 = dot(self.rot2, self.atoms2.T).T
-        self.atoms2[:, 0] = self.atoms2[:, 0] - norm(Or_2[0, :])
+        # tol = 0.01
+        self.atoms2[:, 0] = self.atoms2[:, 0] - norm(Or_2[0, :])  # - tol
         # print(self.atoms2, norm(Or_2[0, :]) )
         return
 
@@ -288,10 +290,19 @@ class GB_character:
         """
         finds the overlapping atoms.
         """
-        IndX = np.where([self.atoms1[:, 0] < 1])[1]
+        periodic_length = norm(self.ortho1[:, 0]) * self.dim[0]
+        periodic_image = self.atoms2 + [periodic_length * 2, 0, 0]
+        # select atoms contained in a smaller window around the GB and its
+        # periodic image
+        IndX = np.where([(self.atoms1[:, 0] < 1) |
+                         (self.atoms1[:, 0] > (periodic_length - 1))])[1]
         IndY = np.where([self.atoms2[:, 0] > -1])[1]
-        X_new = self.atoms1[self.atoms1[:, 0] < 1]
-        Y_new = self.atoms2[self.atoms2[:, 0] > -1]
+        IndY_image = np.where([periodic_image[:, 0] <
+                              (periodic_length + 1)])[1]
+        X_new = self.atoms1[IndX]
+        Y_new = np.concatenate((self.atoms2[IndY], periodic_image[IndY_image]))
+        IndY_new = np.concatenate((IndY, IndY_image))
+        # create a meshgrid search routine
         x = np.arange(0, len(X_new), 1)
         y = np.arange(0, len(Y_new), 1)
         indice = (np.stack(np.meshgrid(x, y)).T).reshape(len(x) * len(y), 2)
@@ -300,7 +311,12 @@ class GB_character:
         indice_y = indice[norms < self.overD][:, 1]
         X_del = X_new[indice_x]
         Y_del = Y_new[indice_y]
-        return (X_del, Y_del, IndX[indice_x], IndY[indice_y])
+
+        if (len(X_del) != len(Y_del)):
+            print("Warning! the number of deleted atoms"
+                  "in the two grains are not equal!")
+        # print(type(IndX), len(IndY), len(IndY_image))
+        return (X_del, Y_del, IndX[indice_x], IndY_new[indice_y])
 
     def Translate(self, a, b):
 
@@ -311,7 +327,7 @@ class GB_character:
         tol = 0.001
         if (1 - cslgen.ang(self.gbplane, self.axis) < tol):
 
-            M1, M2 = cslgen.Create_minimal_cell_Method_1(
+            M1, _ = cslgen.Create_minimal_cell_Method_1(
                      self.sigma, self.axis, self.R)
             D = (1 / self.sigma * cslgen.DSC_vec(self.basis, self.sigma, M1))
             Dvecs = cslgen.DSC_on_plane(D, self.gbplane)
@@ -320,8 +336,8 @@ class GB_character:
             shift2 = TransDvecs[:, 1] / 2
             a = b = 3
         else:
-            #a = 10
-            #b = 5
+            # a = 10
+            # b = 5
             if norm(self.ortho1[:, 1]) > norm(self.ortho1[:, 2]):
 
                 shift1 = (1 / a) * (norm(self.ortho1[:, 1]) *
@@ -379,23 +395,23 @@ class GB_character:
 
         xlo = -1 * np.round(norm(self.ortho1[:, 0]) * dimx * self.LatP, 8)
         xhi = np.round(norm(self.ortho1[:, 0]) * dimx * self.LatP, 8)
-        LenX= xhi - xlo
+        LenX = xhi - xlo
         ylo = 0.0
         yhi = np.round(norm(self.ortho1[:, 1]) * dimy * self.LatP, 8)
-        LenY= yhi - ylo
+        LenY = yhi - ylo
         zlo = 0.0
         zhi = np.round(norm(self.ortho1[:, 2]) * dimz * self.LatP, 8)
         LenZ = zhi - zlo
 
         Wf = np.concatenate((X_new, Y_new))
 
-        with open(name + plane + '_' + overD + '_' +Trans, 'w') as f:
+        with open(name + plane + '_' + overD + '_' + Trans, 'w') as f:
             f.write('#POSCAR written by GB_code \n')
             f.write('1 \n')
             f.write('{0:.8f} 0.0 0.0 \n'.format(LenX))
             f.write('0.0 {0:.8f} 0.0 \n'.format(LenY))
             f.write('0.0 0.0 {0:.8f} \n'.format(LenZ))
-            f.write('{} {} \n'.format(len(X),len(Y)))
+            f.write('{} {} \n'.format(len(X), len(Y)))
             f.write('Cartesian\n')
             np.savetxt(f, Wf, fmt='%.8f %.8f %.8f')
         f.close()
@@ -439,7 +455,7 @@ class GB_character:
         Wf = np.concatenate((W1, W2))
         FinalMat = np.concatenate((Counter.T, Wf), axis=1)
 
-        with open(name + plane + '_' + overD + '_' +Trans, 'w') as f:
+        with open(name + plane + '_' + overD + '_' + Trans, 'w') as f:
             f.write('#Header \n \n')
             f.write('{} atoms \n \n'.format(NumberAt))
             f.write('2 atom types \n \n')
@@ -489,24 +505,24 @@ def main():
 
         if overlap > 0 and rigid:
             gbI.WriteGB(
-                overlap = overlap, whichG = whichG, rigid = rigid, a = a,
-                b = b, dim1 = dim1, dim2 = dim2, dim3 = dim3, file = file
+                overlap=overlap, whichG=whichG, rigid=rigid, a=a,
+                b=b, dim1=dim1, dim2=dim2, dim3=dim3, file=file
                 )
         elif overlap > 0 and not rigid:
             gbI.WriteGB(
-                overlap = overlap, whichG = whichG, rigid = rigid,
-                dim1 = dim1, dim2 = dim2, dim3 = dim3, file = file
+                overlap=overlap, whichG=whichG, rigid=rigid,
+                dim1=dim1, dim2=dim2, dim3=dim3, file=file
                 )
         elif overlap == 0 and rigid:
             gbI.WriteGB(
-                overlap = overlap, rigid = rigid, a = a,
-                b = b, dim1 = dim1, dim2 = dim2, dim3 = dim3,
-                file = file
+                overlap=overlap, rigid=rigid, a=a,
+                b=b, dim1=dim1, dim2=dim2, dim3=dim3,
+                file=file
                 )
         elif overlap == 0 and not rigid:
             gbI.WriteGB(
-                overlap = overlap, rigid = rigid,
-                dim1 = dim1, dim2 = dim2, dim3 = dim3, file = file
+                overlap=overlap, rigid=rigid,
+                dim1=dim1, dim2=dim2, dim3=dim3, file=file
                 )
     else:
         print(__doc__)
