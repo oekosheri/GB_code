@@ -18,7 +18,7 @@ import sys
 import numpy as np
 from numpy import dot, cross
 from numpy.linalg import det, norm
-import csl_generator as cslgen
+from . import csl_generator as cslgen
 import warnings
 
 
