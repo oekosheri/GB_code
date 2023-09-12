@@ -475,7 +475,7 @@ def main():
     if len(sys.argv) == 2:
         io_file = sys.argv[1]
         file = open(io_file, 'r')
-        in_params = yaml.load(file)
+        in_params = yaml.safe_load(file)
 
         try:
             axis = np.array(in_params['axis'])
